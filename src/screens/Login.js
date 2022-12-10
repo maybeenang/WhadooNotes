@@ -79,9 +79,13 @@ const Login = ({ navigation }) => {
 
       <View style={styles.otherTextContainer}>
         <Text style={[styles.subTitle, { fontSize: 18, fontWeight: "500" }]}>
-          Already have an account?{" "}
+          New to Logistics?{" "}
         </Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Register");
+          }}
+        >
           <Text
             style={[
               styles.subTitle,
@@ -92,7 +96,7 @@ const Login = ({ navigation }) => {
               },
             ]}
           >
-            Sign In
+            Sign Up
           </Text>
         </TouchableOpacity>
       </View>
