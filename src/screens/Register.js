@@ -1,25 +1,104 @@
-import { StyleSheet, Text, View, TextInput } from "react-native";
-import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 
-const Register = () => {
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons, AntDesign, MaterialIcons } from "@expo/vector-icons";
+import SignUp from "../assets/flatImage/SignUp.svg";
+
+const Register = ({ navigation }) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Text style={{
-          color: "#fff",
-          fontSize: 36,
-          fontWeight: "600"
-        }}>Register.svg</Text>
+    <SafeAreaView style={styles.container}>
+      <TouchableOpacity
+        style={styles.toggle}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <Ionicons name="arrow-back" size={24} color="#4B4B4B" />
+      </TouchableOpacity>
+      <SignUp width={300} height={300} style={styles.flatImage} />
+      <Text style={styles.title}>Sign Up</Text>
+      <View style={[styles.inpuContainer, { marginTop: 30 }]}>
+        <AntDesign
+          name="user"
+          size={24}
+          color="#292929"
+          style={{ marginRight: 20 }}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Username"
+          placeholderTextColor="#D4D4D4"
+        />
       </View>
-      <View style={styles.pageNameContainer}>
-        <Text style={styles.pageName}>Sign Up</Text>
+      <View style={styles.inpuContainer}>
+        <MaterialIcons
+          name="alternate-email"
+          size={24}
+          color="#292929"
+          style={{ marginRight: 20 }}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          placeholderTextColor="#D4D4D4"
+        />
       </View>
-      <View>
-        <View>
-          
-        </View>
+      <View style={styles.inpuContainer}>
+        <AntDesign
+          name="lock1"
+          size={24}
+          color="#292929"
+          style={{ marginRight: 20 }}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          placeholderTextColor="#D4D4D4"
+        />
       </View>
-    </View>
+      <View style={[styles.inpuContainer, { marginBottom: 30 }]}>
+        <AntDesign
+          name="unlock"
+          size={24}
+          color="#292929"
+          style={{ marginRight: 20 }}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Re-enter Password"
+          placeholderTextColor="#D4D4D4"
+        />
+      </View>
+      <TouchableOpacity style={styles.button}>
+        <Text style={[styles.subTitle, { color: "#fff" }]}>Sign Up</Text>
+      </TouchableOpacity>
+
+      <View style={styles.otherTextContainer}>
+        <Text style={[styles.subTitle, { fontSize: 18, fontWeight: "500" }]}>
+          Already have an account?{" "}
+        </Text>
+        <TouchableOpacity>
+          <Text
+            style={[
+              styles.subTitle,
+              {
+                color: "#0029FF",
+                textDecorationLine: "underline",
+                fontSize: 18,
+              },
+            ]}
+          >
+            Sign In
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -27,51 +106,58 @@ export default Register;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
+    flex: 1,
+    padding: 30,
     alignItems: "center",
-    justifyContent: "center",
   },
-  imageContainer: {
-    width: 313,
-    height: 313,
-    backgroundColor: "#4b4b4b",
-    justifyContent: "center",
-    alignItems: "center"
+  toggle: {
+    alignSelf: "flex-start",
+    marginBottom: 20,
   },
-  pageNameContainer: {
-    width: 313
+  flatImage: {
+    marginBottom: 20,
   },
-  pageName: {
-    fontSize: 36,
-    fontWeight: "900", 
-    color: "#4B4B4B"
-  },
-  descriptionContainer: {
-    width: 249,
-    height: 38
-  },
-  descpription: {
-    fontSize: 16,
-    opacity: 0.8,
+  title: {
+    fontSize: 45,
+    fontWeight: "900",
+    alignSelf: "flex-start",
     color: "#4B4B4B",
-    textAlign: "center"
+  },
+  inpuContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    marginTop: 5,
+    marginBottom: 10,
+  },
+  input: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#4B4B4B",
+    fontSize: 18,
+    width: "80%",
+    fontWeight: "500",
+    color: "#4B4B4B",
+  },
+  subTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#a9a9a9",
+    textAlign: "center",
   },
   button: {
-    marginTop: 87,
-    width: 233,
-    height: 39,
     backgroundColor: "#292929",
-    justifyContent: "center",
+    width: "80%",
+    height: 40,
+    borderRadius: 5,
     alignItems: "center",
-    borderRadius: 5
-  }, 
-  buttonText: {
-    fontSize: 16,
-    color: "#fff"
+    justifyContent: "center",
+    marginTop: 20,
+    marginBottom: 10,
   },
-  footer: {
-    marginTop: 29,
-    flexDirection: "row"
-  }
+  otherTextContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

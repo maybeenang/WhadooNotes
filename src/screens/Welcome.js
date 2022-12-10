@@ -1,58 +1,49 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-import React from "react";
+import WelcomeSvg from "../assets/flatImage/WelcomeSvg.svg";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const Welcome = () => {
+const Welcome = ({ navigation }) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Text
-          style={{
-            color: "#fff",
-            fontSize: 36,
-            fontWeight: "600",
-          }}
-        >
-          Welcome.svg
-        </Text>
+    <SafeAreaView style={styles.container}>
+      <TouchableOpacity style={styles.toggle}>
+        <Ionicons name="moon" size={24} color="#292929" />
+      </TouchableOpacity>
+      <WelcomeSvg width={300} height={300} style={styles.flatImage} />
+      <Text style={styles.title}>WhadooNotes </Text>
+      <View style={[{ width: "70%" }]}>
+        <Text style={styles.subTitle}>Create notes anywhere and everytime</Text>
       </View>
-      <View>
-        <Text style={styles.appName}>WhadooNotes</Text>
-      </View>
-      <View style={styles.descriptionContainer}>
-        <Text style={styles.descpription}>
-          Create notes anywhere and everytime
-        </Text>
-      </View>
-      <View>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.footer}>
-        <Text
-          style={{
-            color: "#292929",
-            fontSize: 16,
-          }}
-        >
-          Already have account ?{" "}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          navigation.navigate("Register");
+        }}
+      >
+        <Text style={[styles.subTitle, { color: "#fff" }]}>Sign Up</Text>
+      </TouchableOpacity>
+
+      <View style={styles.otherTextContainer}>
+        <Text style={[styles.subTitle, { fontSize: 18, fontWeight: "500" }]}>
+          Already have an account?{" "}
         </Text>
         <TouchableOpacity>
           <Text
-            style={{
-              color: "#0029FF",
-              fontSize: 16,
-              textDecorationLine: "underline",
-            }}
+            style={[
+              styles.subTitle,
+              {
+                color: "#0029FF",
+                textDecorationLine: "underline",
+                fontSize: 18,
+              },
+            ]}
           >
             Sign In
           </Text>
         </TouchableOpacity>
       </View>
-      <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -60,48 +51,43 @@ export default Welcome;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  imageContainer: {
-    width: 313,
-    height: 313,
-    backgroundColor: "#4b4b4b",
-    justifyContent: "center",
+    flex: 1,
+    padding: 30,
     alignItems: "center",
   },
-  appName: {
-    fontSize: 36,
+  toggle: {
+    alignSelf: "flex-end",
+  },
+  flatImage: {
+    marginTop: 50,
+    marginBottom: 15,
+  },
+  title: {
+    fontSize: 45,
     fontWeight: "600",
-    color: "#787878",
-  },
-  descriptionContainer: {
-    width: 249,
-    height: 38,
-  },
-  descpription: {
-    fontSize: 16,
-    opacity: 0.8,
     color: "#4B4B4B",
     textAlign: "center",
   },
+  subTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#a9a9a9",
+    textAlign: "center",
+  },
   button: {
-    marginTop: 87,
-    width: 233,
-    height: 39,
     backgroundColor: "#292929",
-    justifyContent: "center",
-    alignItems: "center",
+    width: "80%",
+    height: 40,
     borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "40%",
+    marginBottom: 20,
   },
-  buttonText: {
-    fontSize: 16,
-    color: "#fff",
-  },
-  footer: {
-    marginTop: 29,
+  otherTextContainer: {
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
