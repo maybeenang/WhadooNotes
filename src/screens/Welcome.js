@@ -28,7 +28,11 @@ const Welcome = ({ navigation }) => {
         <Text style={[styles.subTitle, { fontSize: 18, fontWeight: "500" }]}>
           Already have an account?{" "}
         </Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Login");
+          }}
+        >
           <Text
             style={[
               styles.subTitle,
