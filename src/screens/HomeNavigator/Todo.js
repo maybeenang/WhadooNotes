@@ -1,4 +1,4 @@
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import {
   ScrollView,
   StyleSheet,
@@ -6,24 +6,38 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Dimensions,
+  Animated,
 } from "react-native";
 
-import { FlashList } from "@shopify/flash-list";
+import { MasonryFlashList } from "@shopify/flash-list";
 
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRef } from "react";
 
 const Todo = () => {
   const renderItem = ({ item }) => {
     return (
-      <View style={styles.todoContainer}>
-        <View style={styles.todoTitleContainer}>
-          <Text style={styles.todoTitle}>{item.title}</Text>
-          <Text style={styles.todoDescription}>{item.description}</Text>
+      <TouchableOpacity style={styles.itemContainer}>
+        <View style={styles.itemTitleContainer}>
+          <Text style={{ fontSize: 20, fontWeight: "600", color: "#676767" }}>
+            {item.title}
+          </Text>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity>
+              <Entypo name="pin" size={16} color="#676767" />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Entypo name="dots-three-vertical" size={16} color="#676767" />
+            </TouchableOpacity>
+          </View>
         </View>
-        <TouchableOpacity style={styles.todoButton}>
-          <AntDesign name="right" size={24} color="#676767" />
-        </TouchableOpacity>
-      </View>
+        <View style={styles.descriptionContainer}>
+          <Text style={{ fontSize: 18, textAlign: "justify" }}>
+            {item.description}
+          </Text>
+        </View>
+      </TouchableOpacity>
     );
   };
 
@@ -31,13 +45,13 @@ const Todo = () => {
     {
       id: 1,
       title: "Buy Milk",
-      description: "Buy 2L Milk",
+      description: "Buy 2L Milk ",
       pinned: true,
     },
     {
       id: 2,
       title: "Buy Bread",
-      description: "Buy 2 Loaves of Bread",
+      description: "Buy 2 Loaves of dnsajdaks dsa djas dakd kad akjdslad ak",
       pinned: false,
     },
     {
@@ -72,6 +86,7 @@ const Todo = () => {
     },
   ];
 
+  const x = useRef(new Animated.Value(0)).current;
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
@@ -95,27 +110,73 @@ const Todo = () => {
 
       <View style={styles.labelScreen}>
         <TouchableOpacity style={styles.labelButton}>
-          <Text>Notes</Text>
+          <Text style={[styles.labelText, styles.labelActive]}>Notes</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.labelButton}>
-          <Text>Todo</Text>
+          <Text style={styles.labelText}>Todo</Text>
         </TouchableOpacity>
       </View>
-      <FlashList
-        data={todoData}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        columnWrapperStyle={{ justifyContent: "space-between" }}
-        estimatedItemSize={100}
+      <Animated.View
+        style={[
+          styles.scrollIndicator,
+          {
+            transform: [
+              {
+                translateX: x.interpolate({
+                  inputRange: [0, Dimensions.get("window").width - 30],
+                  outputRange: [
+                    0,
+                    Dimensions.get("window").width -
+                      Dimensions.get("window").width +
+                      36 * 2,
+                  ],
+                  extrapolate: "clamp",
+                }),
+              },
+            ],
+          },
+        ]}
       />
-
-      <ScrollView
+      <Animated.ScrollView
         style={styles.scrollHorizontal}
-        horizontal
+        horizontal={true}
         pagingEnabled={true}
         showsHorizontalScrollIndicator={false}
-      ></ScrollView>
+        scrollEventThrottle={16}
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { x } } }], {
+          useNativeDriver: true,
+        })}
+      >
+        <View
+          style={{
+            width: Dimensions.get("window").width - 30,
+            paddingHorizontal: 10,
+          }}
+        >
+          <MasonryFlashList
+            data={todoData}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            numColumns={2}
+            estimatedItemSize={100}
+          />
+        </View>
+
+        <View
+          style={{
+            width: Dimensions.get("window").width - 30,
+            marginStart: -10,
+            paddingHorizontal: 5,
+          }}
+        >
+          <MasonryFlashList
+            data={todoData}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            estimatedItemSize={100}
+          />
+        </View>
+      </Animated.ScrollView>
     </SafeAreaView>
   );
 };
@@ -127,6 +188,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     padding: 20,
+    paddingBottom: 10,
   },
   headerContainer: {
     backgroundColor: "#fff",
@@ -154,16 +216,54 @@ const styles = StyleSheet.create({
   },
   scrollHorizontal: {
     marginTop: 10,
-    backgroundColor: "red",
+    flexDirection: "row",
   },
   labelScreen: {
     flexDirection: "row",
-    backgroundColor: "pink",
     marginTop: 10,
   },
   labelButton: {
-    backgroundColor: "yellow",
     padding: 10,
     marginEnd: 10,
+  },
+  labelText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#9F9F9F",
+  },
+  labelActive: {
+    // borderBottomWidth: 2,
+    // color: "black",
+    // fontWeight: "900",
+  },
+  itemContainer: {
+    backgroundColor: "#CEF1F5",
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+    width: "95%",
+  },
+  itemTitleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  descriptionContainer: {
+    marginTop: 10,
+    // backgroundColor: "#fff",
+    width: "90%",
+  },
+  scrollIndicator: {
+    height: 4,
+    width: 50,
+    marginTop: -5,
+    backgroundColor: "#676767",
+    borderRadius: 5,
+    marginLeft: 7,
   },
 });
