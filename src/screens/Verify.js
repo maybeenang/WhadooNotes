@@ -7,10 +7,10 @@ import {
 } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons, AntDesign, MaterialIcons } from "@expo/vector-icons";
-import SignUp from "../assets/flatImage/SignUp.svg";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
+import Otp from "../assets/flatImage/Otp.svg";
 
-const Register = ({ navigation }) => {
+const Verify = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity
@@ -21,76 +21,39 @@ const Register = ({ navigation }) => {
       >
         <Ionicons name="arrow-back" size={24} color="#4B4B4B" />
       </TouchableOpacity>
-      <SignUp width={300} height={300} style={styles.flatImage} />
-      <Text style={styles.title}>Sign Up</Text>
-      <View style={[styles.inpuContainer, { marginTop: 30 }]}>
+      <Otp width={300} height={300} style={styles.flatImage} />
+      <Text style={styles.subTitle}>
+        Please check your email, we have send otp code to{" "}
+        <Text style={{ color: "#FF5C00" }}>user@gmail.com</Text>
+      </Text>
+      <View style={[styles.inpuContainer, { marginTop: 60, marginBottom: 60 }]}>
         <AntDesign
-          name="user"
+          name="key"
           size={24}
           color="#292929"
           style={{ marginRight: 20 }}
         />
         <TextInput
           style={styles.input}
-          placeholder="Username"
-          placeholderTextColor="#D4D4D4"
-        />
-      </View>
-      <View style={styles.inpuContainer}>
-        <MaterialIcons
-          name="alternate-email"
-          size={24}
-          color="#292929"
-          style={{ marginRight: 20 }}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#D4D4D4"
-        />
-      </View>
-      <View style={styles.inpuContainer}>
-        <AntDesign
-          name="lock1"
-          size={24}
-          color="#292929"
-          style={{ marginRight: 20 }}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="#D4D4D4"
-        />
-      </View>
-      <View style={[styles.inpuContainer, { marginBottom: 30 }]}>
-        <AntDesign
-          name="unlock"
-          size={24}
-          color="#292929"
-          style={{ marginRight: 20 }}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Re-enter Password"
+          placeholder="Enter OTP"
           placeholderTextColor="#D4D4D4"
         />
       </View>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          navigation.navigate("Verify");
+          navigation.navigate("Login");
         }}
       >
-        <Text style={[styles.subTitle, { color: "#fff" }]}>Sign Up</Text>
+        <Text style={[styles.subTitle, { color: "#FFF" }]}>Verify</Text>
       </TouchableOpacity>
-
       <View style={styles.otherTextContainer}>
         <Text style={[styles.subTitle, { fontSize: 18, fontWeight: "500" }]}>
-          Already have an account?{" "}
+          Not Receive the code?{" "}
         </Text>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Login");
+            navigation.navigate("Verify");
           }}
         >
           <Text
@@ -103,7 +66,7 @@ const Register = ({ navigation }) => {
               },
             ]}
           >
-            Sign In
+            Resend Code
           </Text>
         </TouchableOpacity>
       </View>
@@ -111,7 +74,7 @@ const Register = ({ navigation }) => {
   );
 };
 
-export default Register;
+export default Verify;
 
 const styles = StyleSheet.create({
   container: {
@@ -127,11 +90,11 @@ const styles = StyleSheet.create({
   flatImage: {
     marginBottom: 20,
   },
-  title: {
-    fontSize: 45,
-    fontWeight: "900",
-    alignSelf: "flex-start",
-    color: "#4B4B4B",
+  subTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#a9a9a9",
+    textAlign: "center",
   },
   inpuContainer: {
     flexDirection: "row",
@@ -147,12 +110,6 @@ const styles = StyleSheet.create({
     width: "80%",
     fontWeight: "500",
     color: "#4B4B4B",
-  },
-  subTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#a9a9a9",
-    textAlign: "center",
   },
   button: {
     backgroundColor: "#292929",
