@@ -8,9 +8,70 @@ import {
   View,
 } from "react-native";
 
+import { FlashList } from "@shopify/flash-list";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Todo = () => {
+  const renderItem = ({ item }) => {
+    return (
+      <View style={styles.todoContainer}>
+        <View style={styles.todoTitleContainer}>
+          <Text style={styles.todoTitle}>{item.title}</Text>
+          <Text style={styles.todoDescription}>{item.description}</Text>
+        </View>
+        <TouchableOpacity style={styles.todoButton}>
+          <AntDesign name="right" size={24} color="#676767" />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  let todoData = [
+    {
+      id: 1,
+      title: "Buy Milk",
+      description: "Buy 2L Milk",
+      pinned: true,
+    },
+    {
+      id: 2,
+      title: "Buy Bread",
+      description: "Buy 2 Loaves of Bread",
+      pinned: false,
+    },
+    {
+      id: 3,
+      title: "Buy Eggs",
+      description: "Buy 12 Eggs",
+      pinned: false,
+    },
+    {
+      id: 4,
+      title: "Buy Milk",
+      description: "Buy 2L Milk",
+      pinned: true,
+    },
+    {
+      id: 5,
+      title: "Buy Bread",
+      description: "Buy 2 Loaves of Bread",
+      pinned: false,
+    },
+    {
+      id: 6,
+      title: "Buy Eggs",
+      description: "Buy 12 Eggs",
+      pinned: false,
+    },
+    {
+      id: 7,
+      title: "Buy Milk",
+      description: "Buy 2L Milk",
+      pinned: true,
+    },
+  ];
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
@@ -40,6 +101,14 @@ const Todo = () => {
           <Text>Todo</Text>
         </TouchableOpacity>
       </View>
+      <FlashList
+        data={todoData}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        columnWrapperStyle={{ justifyContent: "space-between" }}
+        estimatedItemSize={100}
+      />
 
       <ScrollView
         style={styles.scrollHorizontal}
@@ -84,12 +153,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   scrollHorizontal: {
-    marginTop: 20,
+    marginTop: 10,
     backgroundColor: "red",
   },
   labelScreen: {
     flexDirection: "row",
     backgroundColor: "pink",
+    marginTop: 10,
   },
   labelButton: {
     backgroundColor: "yellow",
