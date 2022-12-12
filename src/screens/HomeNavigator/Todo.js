@@ -13,9 +13,11 @@ import {
 import { MasonryFlashList } from "@shopify/flash-list";
 
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const Todo = () => {
+  const [currentMenu, setCurrentMenu] = useState("Notes");
+
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity style={styles.itemContainer}>
@@ -94,7 +96,12 @@ const Todo = () => {
           <Text style={styles.headerTitle}>Hi, User</Text>
           <Text style={styles.headerTitle}>Good Morning</Text>
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            console.log(currentMenu);
+          }}
+        >
           <AntDesign name="user" size={24} color="#676767" />
         </TouchableOpacity>
       </View>
@@ -110,10 +117,24 @@ const Todo = () => {
 
       <View style={styles.labelScreen}>
         <TouchableOpacity style={styles.labelButton}>
-          <Text style={[styles.labelText, styles.labelActive]}>Notes</Text>
+          <Text
+            style={[
+              styles.labelText,
+              currentMenu == "Notes" ? styles.labelActive : null,
+            ]}
+          >
+            Notes
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.labelButton}>
-          <Text style={styles.labelText}>Todo</Text>
+          <Text
+            style={[
+              styles.labelText,
+              currentMenu == "Todo" ? styles.labelActive : null,
+            ]}
+          >
+            Todo
+          </Text>
         </TouchableOpacity>
       </View>
       <Animated.View
@@ -145,6 +166,11 @@ const Todo = () => {
         scrollEventThrottle={16}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { x } } }], {
           useNativeDriver: true,
+          listener: (event) => {
+            setCurrentMenu(
+              event.nativeEvent.contentOffset.x === 0 ? "Notes" : "Todo"
+            );
+          },
         })}
       >
         <View
@@ -232,9 +258,8 @@ const styles = StyleSheet.create({
     color: "#9F9F9F",
   },
   labelActive: {
-    // borderBottomWidth: 2,
-    // color: "black",
-    // fontWeight: "900",
+    color: "#676767",
+    fontWeight: "900",
   },
   itemContainer: {
     backgroundColor: "#CEF1F5",
