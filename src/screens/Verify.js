@@ -1,54 +1,95 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { Text, View, TextInput, TouchableOpacity } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import Otp from "../assets/flatImage/Otp.svg";
 
+// import redux
+import { useSelector } from "react-redux";
+
+// import styles
+import { VerifyStyles } from "../styles/VerifyStyles";
+import { ThemeStyles } from "../styles/ThemeStyles";
+
 const Verify = ({ navigation }) => {
+  const { darkMode } = useSelector((state) => state.darkMode);
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[
+        VerifyStyles.container,
+        darkMode ? ThemeStyles.containerLight : ThemeStyles.containerDark,
+      ]}
+    >
       <TouchableOpacity
-        style={styles.toggle}
+        style={VerifyStyles.toggle}
         onPress={() => {
           navigation.goBack();
         }}
       >
-        <Ionicons name="arrow-back" size={24} color="#4B4B4B" />
+        <Ionicons
+          name="arrow-back"
+          size={24}
+          color={darkMode ? "#292929" : "#fff"}
+        />
       </TouchableOpacity>
-      <Otp width={300} height={300} style={styles.flatImage} />
-      <Text style={styles.subTitle}>
+      <Otp width={300} height={300} style={VerifyStyles.flatImage} />
+      <Text
+        style={[
+          VerifyStyles.subTitle,
+          darkMode ? ThemeStyles.subTitleLight : ThemeStyles.subTitleDark,
+        ]}
+      >
         Please check your email, we have send otp code to{" "}
         <Text style={{ color: "#FF5C00" }}>user@gmail.com</Text>
       </Text>
-      <View style={[styles.inpuContainer, { marginTop: 60, marginBottom: 60 }]}>
+      <View
+        style={[
+          VerifyStyles.inpuContainer,
+          { marginTop: 60, marginBottom: 60 },
+        ]}
+      >
         <AntDesign
           name="key"
           size={24}
-          color="#292929"
+          color={darkMode ? "#292929" : "#fff"}
           style={{ marginRight: 20 }}
         />
         <TextInput
-          style={styles.input}
+          style={[
+            VerifyStyles.input,
+            darkMode ? ThemeStyles.inputLight : ThemeStyles.inputDark,
+          ]}
           placeholder="Enter OTP"
-          placeholderTextColor="#D4D4D4"
+          placeholderTextColor={darkMode ? "#D4D4D4" : "#A5A5A5"}
         />
       </View>
       <TouchableOpacity
-        style={styles.button}
+        style={[
+          VerifyStyles.button,
+          darkMode ? ThemeStyles.buttonLight : ThemeStyles.buttonDark,
+        ]}
         onPress={() => {
           navigation.navigate("Login");
         }}
       >
-        <Text style={[styles.subTitle, { color: "#FFF" }]}>Verify</Text>
+        <Text
+          style={[
+            VerifyStyles.subTitle,
+            darkMode ? { color: "#fff" } : { color: "#4B4B4B" },
+          ]}
+        >
+          Verify
+        </Text>
       </TouchableOpacity>
-      <View style={styles.otherTextContainer}>
-        <Text style={[styles.subTitle, { fontSize: 18, fontWeight: "500" }]}>
+      <View style={VerifyStyles.otherTextContainer}>
+        <Text
+          style={[
+            VerifyStyles.subTitle,
+            { fontSize: 18, fontWeight: "500" },
+            darkMode ? ThemeStyles.subTitleLight : ThemeStyles.subTitleDark,
+          ]}
+        >
           Not Receive the code?{" "}
         </Text>
         <TouchableOpacity
@@ -58,12 +99,12 @@ const Verify = ({ navigation }) => {
         >
           <Text
             style={[
-              styles.subTitle,
+              VerifyStyles.subTitle,
               {
-                color: "#0029FF",
                 textDecorationLine: "underline",
                 fontSize: 18,
               },
+              darkMode ? { color: "#0029FF" } : { color: "#7E93FF" },
             ]}
           >
             Resend Code
@@ -75,55 +116,3 @@ const Verify = ({ navigation }) => {
 };
 
 export default Verify;
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    flex: 1,
-    padding: 30,
-    alignItems: "center",
-  },
-  toggle: {
-    alignSelf: "flex-start",
-    marginBottom: 20,
-  },
-  flatImage: {
-    marginBottom: 20,
-  },
-  subTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#a9a9a9",
-    textAlign: "center",
-  },
-  inpuContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    marginTop: 5,
-    marginBottom: 10,
-  },
-  input: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#4B4B4B",
-    fontSize: 18,
-    width: "80%",
-    fontWeight: "500",
-    color: "#4B4B4B",
-  },
-  button: {
-    backgroundColor: "#292929",
-    width: "80%",
-    height: 40,
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 20,
-    marginBottom: 10,
-  },
-  otherTextContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

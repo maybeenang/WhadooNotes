@@ -18,11 +18,16 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const Stack = createNativeStackNavigator();
 
+// import redux
+import { useSelector } from "react-redux";
+
 const RootNavigation = () => {
+  const { darkMode } = useSelector((state) => state.darkMode);
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <StatusBar style="auto" />
+        <StatusBar style={darkMode ? "dark" : "light"} />
         <Stack.Navigator
           screenOptions={{
             headerShown: false,
@@ -33,8 +38,8 @@ const RootNavigation = () => {
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Verify" component={Verify} />
           <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="ResetPassword" component={ResetPassword} />
+          <Stack.Screen name="Home" component={Home} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

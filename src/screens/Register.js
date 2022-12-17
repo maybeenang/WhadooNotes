@@ -10,82 +10,136 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, AntDesign, MaterialIcons } from "@expo/vector-icons";
 import SignUp from "../assets/flatImage/SignUp.svg";
 
+// import redux
+import { useSelector } from "react-redux";
+
+// import styles
+import { RegisterStyles } from "../styles/RegisterStyles";
+import { ThemeStyles } from "../styles/ThemeStyles";
+
 const Register = ({ navigation }) => {
+  // get theme from redux
+  const { darkMode } = useSelector((state) => state.darkMode);
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[
+        RegisterStyles.container,
+        darkMode ? ThemeStyles.containerLight : ThemeStyles.containerDark,
+      ]}
+    >
       <TouchableOpacity
-        style={styles.toggle}
+        style={RegisterStyles.toggle}
         onPress={() => {
           navigation.goBack();
         }}
       >
-        <Ionicons name="arrow-back" size={24} color="#4B4B4B" />
+        <Ionicons
+          name="arrow-back"
+          size={24}
+          color={darkMode ? "#292929" : "#fff"}
+        />
       </TouchableOpacity>
-      <SignUp width={300} height={300} style={styles.flatImage} />
-      <Text style={styles.title}>Sign Up</Text>
-      <View style={[styles.inpuContainer, { marginTop: 30 }]}>
+      <SignUp width={300} height={300} style={RegisterStyles.flatImage} />
+      <Text
+        style={[
+          RegisterStyles.title,
+          darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
+        ]}
+      >
+        Sign Up
+      </Text>
+      <View style={[RegisterStyles.inpuContainer, { marginTop: 30 }]}>
         <AntDesign
           name="user"
           size={24}
-          color="#292929"
+          color={darkMode ? "#292929" : "#fff"}
           style={{ marginRight: 20 }}
         />
         <TextInput
-          style={styles.input}
+          style={[
+            RegisterStyles.input,
+            darkMode ? ThemeStyles.inputLight : ThemeStyles.inputDark,
+          ]}
           placeholder="Username"
-          placeholderTextColor="#D4D4D4"
+          placeholderTextColor={darkMode ? "#D4D4D4" : "#A5A5A5"}
         />
       </View>
-      <View style={styles.inpuContainer}>
+      <View style={RegisterStyles.inpuContainer}>
         <MaterialIcons
           name="alternate-email"
           size={24}
-          color="#292929"
+          color={darkMode ? "#292929" : "#fff"}
           style={{ marginRight: 20 }}
         />
         <TextInput
-          style={styles.input}
+          style={[
+            RegisterStyles.input,
+            darkMode ? ThemeStyles.inputLight : ThemeStyles.inputDark,
+          ]}
           placeholder="Email"
-          placeholderTextColor="#D4D4D4"
+          placeholderTextColor={darkMode ? "#D4D4D4" : "#A5A5A5"}
         />
       </View>
-      <View style={styles.inpuContainer}>
+      <View style={RegisterStyles.inpuContainer}>
         <AntDesign
           name="lock1"
           size={24}
-          color="#292929"
+          color={darkMode ? "#292929" : "#fff"}
           style={{ marginRight: 20 }}
         />
         <TextInput
-          style={styles.input}
+          style={[
+            RegisterStyles.input,
+            darkMode ? ThemeStyles.inputLight : ThemeStyles.inputDark,
+          ]}
           placeholder="Password"
-          placeholderTextColor="#D4D4D4"
+          placeholderTextColor={darkMode ? "#D4D4D4" : "#A5A5A5"}
         />
       </View>
-      <View style={[styles.inpuContainer, { marginBottom: 30 }]}>
+      <View style={[RegisterStyles.inpuContainer, { marginBottom: 30 }]}>
         <AntDesign
           name="unlock"
           size={24}
-          color="#292929"
+          color={darkMode ? "#292929" : "#fff"}
           style={{ marginRight: 20 }}
         />
         <TextInput
-          style={styles.input}
+          style={[
+            RegisterStyles.input,
+            darkMode ? ThemeStyles.inputLight : ThemeStyles.inputDark,
+          ]}
           placeholder="Re-enter Password"
-          placeholderTextColor="#D4D4D4"
+          placeholderTextColor={darkMode ? "#D4D4D4" : "#A5A5A5"}
         />
       </View>
       <TouchableOpacity
-        style={styles.button}
+        style={[
+          RegisterStyles.button,
+          darkMode ? ThemeStyles.buttonLight : ThemeStyles.buttonDark,
+        ]}
         onPress={() => {
           navigation.navigate("Verify");
         }}
       >
-        <Text style={[styles.subTitle, { color: "#fff" }]}>Sign Up</Text>
+        <Text
+          style={[
+            RegisterStyles.subTitle,
+            darkMode ? { color: "#fff" } : { color: "#4B4B4B" },
+          ]}
+        >
+          Sign Up
+        </Text>
       </TouchableOpacity>
 
-      <View style={styles.otherTextContainer}>
-        <Text style={[styles.subTitle, { fontSize: 18, fontWeight: "500" }]}>
+      <View style={RegisterStyles.otherTextContainer}>
+        <Text
+          style={[
+            RegisterStyles.subTitle,
+            { fontSize: 18, fontWeight: "500" },
+            darkMode ? ThemeStyles.subTitleLight : ThemeStyles.subTitleDark,
+          ]}
+        >
           Already have an account?{" "}
         </Text>
         <TouchableOpacity
@@ -95,12 +149,12 @@ const Register = ({ navigation }) => {
         >
           <Text
             style={[
-              styles.subTitle,
+              RegisterStyles.subTitle,
               {
-                color: "#0029FF",
                 textDecorationLine: "underline",
                 fontSize: 18,
               },
+              darkMode ? { color: "#0029FF" } : { color: "#7E93FF" },
             ]}
           >
             Sign In
@@ -112,61 +166,3 @@ const Register = ({ navigation }) => {
 };
 
 export default Register;
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    flex: 1,
-    padding: 30,
-    alignItems: "center",
-  },
-  toggle: {
-    alignSelf: "flex-start",
-    marginBottom: 20,
-  },
-  flatImage: {
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 45,
-    fontWeight: "900",
-    alignSelf: "flex-start",
-    color: "#4B4B4B",
-  },
-  inpuContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    marginTop: 5,
-    marginBottom: 10,
-  },
-  input: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#4B4B4B",
-    fontSize: 18,
-    width: "80%",
-    fontWeight: "500",
-    color: "#4B4B4B",
-  },
-  subTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#a9a9a9",
-    textAlign: "center",
-  },
-  button: {
-    backgroundColor: "#292929",
-    width: "80%",
-    height: 40,
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 20,
-    marginBottom: 10,
-  },
-  otherTextContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

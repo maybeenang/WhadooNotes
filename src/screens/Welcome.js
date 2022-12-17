@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+// import svg
 import WelcomeSvg from "../assets/flatImage/WelcomeSvg.svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -8,37 +9,79 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDarkMode } from "../redux/features/darkModeSlice";
 
+// import styles
+import { WelcomeStyles } from "../styles/WelcomeStyles";
+import { ThemeStyles } from "../styles/ThemeStyles";
+
 const Welcome = ({ navigation }) => {
   const { darkMode } = useSelector((state) => state.darkMode);
   const dispatch = useDispatch();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[
+        WelcomeStyles.container,
+        darkMode ? ThemeStyles.containerLight : ThemeStyles.containerDark,
+      ]}
+    >
       <TouchableOpacity
-        style={styles.toggle}
+        style={WelcomeStyles.toggle}
         onPress={() => {
           dispatch(toggleDarkMode());
-          console.log(darkMode);
         }}
       >
-        <Ionicons name="moon" size={24} color="#292929" />
+        {darkMode ? (
+          <Ionicons name="moon" size={24} color="#292929" />
+        ) : (
+          <Ionicons name="sunny" size={24} color="#fff" />
+        )}
       </TouchableOpacity>
-      <WelcomeSvg width={300} height={300} style={styles.flatImage} />
-      <Text style={styles.title}>WhadooNotes </Text>
+      <WelcomeSvg width={300} height={300} style={WelcomeStyles.flatImage} />
+      <Text
+        style={[
+          WelcomeStyles.title,
+          darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
+        ]}
+      >
+        WhadooNotes{" "}
+      </Text>
       <View style={[{ width: "70%" }]}>
-        <Text style={styles.subTitle}>Create notes anywhere and everytime</Text>
+        <Text
+          style={[
+            WelcomeStyles.subTitle,
+            darkMode ? ThemeStyles.subTitleLight : ThemeStyles.subTitleDark,
+          ]}
+        >
+          Create notes anywhere and everytime
+        </Text>
       </View>
       <TouchableOpacity
-        style={styles.button}
+        style={[
+          WelcomeStyles.button,
+          darkMode ? ThemeStyles.buttonLight : ThemeStyles.buttonDark,
+        ]}
         onPress={() => {
           navigation.navigate("Register");
         }}
       >
-        <Text style={[styles.subTitle, { color: "#fff" }]}>Sign Up</Text>
+        <Text
+          style={[
+            WelcomeStyles.subTitle,
+            darkMode ? { color: "#fff" } : { color: "#4B4B4B" },
+          ]}
+        >
+          Sign Up
+        </Text>
       </TouchableOpacity>
 
-      <View style={styles.otherTextContainer}>
-        <Text style={[styles.subTitle, { fontSize: 18, fontWeight: "500" }]}>
+      <View style={WelcomeStyles.otherTextContainer}>
+        <Text
+          style={[
+            WelcomeStyles.subTitle,
+            { fontSize: 18, fontWeight: "500" },
+            darkMode ? ThemeStyles.subTitleLight : ThemeStyles.subTitleDark,
+          ]}
+        >
           Already have an account?{" "}
         </Text>
         <TouchableOpacity
@@ -48,12 +91,12 @@ const Welcome = ({ navigation }) => {
         >
           <Text
             style={[
-              styles.subTitle,
+              WelcomeStyles.subTitle,
               {
-                color: "#0029FF",
                 textDecorationLine: "underline",
                 fontSize: 18,
               },
+              darkMode ? { color: "#0029FF" } : { color: "#7E93FF" },
             ]}
           >
             Sign In
@@ -65,46 +108,3 @@ const Welcome = ({ navigation }) => {
 };
 
 export default Welcome;
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    flex: 1,
-    padding: 30,
-    alignItems: "center",
-  },
-  toggle: {
-    alignSelf: "flex-end",
-  },
-  flatImage: {
-    marginTop: 50,
-    marginBottom: 15,
-  },
-  title: {
-    fontSize: 45,
-    fontWeight: "600",
-    color: "#4B4B4B",
-    textAlign: "center",
-  },
-  subTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#a9a9a9",
-    textAlign: "center",
-  },
-  button: {
-    backgroundColor: "#292929",
-    width: "80%",
-    height: 40,
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "40%",
-    marginBottom: 20,
-  },
-  otherTextContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
