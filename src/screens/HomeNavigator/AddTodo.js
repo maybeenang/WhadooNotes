@@ -1,39 +1,73 @@
 import { Ionicons } from "@expo/vector-icons";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
+import { View, Text, TouchableOpacity, TextInput } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// import redux
+import { useSelector } from "react-redux";
+
+// import AddTodoStyles
+import { AddTodoStyles } from "../../styles/HomeStyles/AddTodoStyles";
+import { ThemeStyles } from "../../styles/ThemeStyles";
+
 const AddTodo = () => {
+  const { darkMode } = useSelector((state) => state.darkMode);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.button}>
-          <Ionicons name="arrow-back" size={24} color="#676767" />
+    <SafeAreaView
+      style={[
+        AddTodoStyles.container,
+        darkMode ? ThemeStyles.containerLight : ThemeStyles.containerDark,
+      ]}
+    >
+      <View style={AddTodoStyles.header}>
+        <TouchableOpacity
+          style={[
+            AddTodoStyles.button,
+            darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
+          ]}
+        >
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color={darkMode ? "#787878" : "#D4D4D4"}
+          />
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, { width: 80 }]}>
+        <TouchableOpacity
+          style={[
+            AddTodoStyles.button,
+            { width: 80 },
+            darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
+          ]}
+        >
           <Text
             style={{
               fontSize: 18,
               fontWeight: "500",
               textAlign: "center",
-              color: "#676767",
+              color: darkMode ? "#787878" : "#D4D4D4",
             }}
           >
             Save
           </Text>
         </TouchableOpacity>
       </View>
-      <TextInput placeholder="Untitled" style={styles.titleInput} />
+      <TextInput
+        placeholder="Untitled"
+        placeholderTextColor={darkMode ? "#787878" : "#D4D4D4"}
+        style={[
+          AddTodoStyles.titleInput,
+          darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
+        ]}
+      />
       <View style={{ flex: 1 }}>
         <TextInput
           placeholder="Type something..."
-          style={styles.input}
+          placeholderTextColor={darkMode ? "#787878" : "#D4D4D4"}
+          style={[
+            AddTodoStyles.input,
+            darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
+          ]}
           multiline={true}
         />
       </View>
@@ -42,36 +76,3 @@ const AddTodo = () => {
 };
 
 export default AddTodo;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    padding: 30,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  button: {
-    backgroundColor: "#F2F2F2",
-    padding: 10,
-    borderRadius: 5,
-  },
-  titleInput: {
-    height: 50,
-    fontSize: 24,
-    fontWeight: "700",
-    color: "#676767",
-    marginTop: 20,
-    borderBottomWidth: 2,
-    borderBottomColor: "#F2F2F2",
-  },
-  input: {
-    fontSize: 18,
-    fontWeight: "500",
-    color: "#676767",
-    marginTop: 20,
-  },
-});

@@ -8,7 +8,12 @@ import Todo from "./HomeNavigator/Todo";
 import Settings from "./HomeNavigator/Settings";
 import AddTodo from "./HomeNavigator/AddTodo";
 
+// import redux
+import { useSelector } from "react-redux";
+
 const Home = () => {
+  const { darkMode } = useSelector((state) => state.darkMode);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -24,11 +29,11 @@ const Home = () => {
           }
           return <AntDesign name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "black",
-        tabBarInactiveTintColor: "#D8D8D8",
+        tabBarActiveTintColor: darkMode ? "black" : "white",
+        tabBarInactiveTintColor: "#9F9F9F",
         tabBarStyle: {
-          backgroundColor: "#fff",
-          borderTopWidth: 2,
+          backgroundColor: `${darkMode ? "#fff" : "#4B4B4B"}`,
+          borderTopWidth: 0,
           elevation: 0,
         },
         headerShown: false,

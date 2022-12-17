@@ -1,7 +1,5 @@
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import {
-  ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -13,19 +11,28 @@ import {
 import { MasonryFlashList } from "@shopify/flash-list";
 
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+
+// import redux
+import { useSelector } from "react-redux";
+
+// import style
+import { TodoStyles } from "../../styles/HomeStyles/TodoStyles";
+import { ThemeStyles } from "../../styles/ThemeStyles";
 
 const Todo = () => {
   const [currentMenu, setCurrentMenu] = useState("Notes");
 
+  const { darkMode } = useSelector((state) => state.darkMode);
+
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity style={styles.itemContainer}>
-        <View style={styles.itemTitleContainer}>
+      <TouchableOpacity style={TodoStyles.itemContainer}>
+        <View style={TodoStyles.itemTitleContainer}>
           <Text style={{ fontSize: 20, fontWeight: "600", color: "#676767" }}>
             {item.title}
           </Text>
-          <View style={styles.buttonContainer}>
+          <View style={TodoStyles.buttonContainer}>
             <TouchableOpacity>
               <Entypo name="pin" size={16} color="#676767" />
             </TouchableOpacity>
@@ -34,10 +41,8 @@ const Todo = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.descriptionContainer}>
-          <Text style={{ fontSize: 18, textAlign: "justify" }}>
-            {item.description}
-          </Text>
+        <View style={TodoStyles.descriptionContainer}>
+          <Text style={{ fontSize: 18 }}>{item.description}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -90,47 +95,97 @@ const Todo = () => {
 
   const x = useRef(new Animated.Value(0)).current;
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
+    <SafeAreaView
+      style={[
+        TodoStyles.container,
+        darkMode ? ThemeStyles.containerLight : ThemeStyles.containerDark,
+      ]}
+    >
+      <View style={TodoStyles.headerContainer}>
         <View>
-          <Text style={styles.headerTitle}>Hi, User</Text>
-          <Text style={styles.headerTitle}>Good Morning</Text>
+          <Text
+            style={[
+              TodoStyles.headerTitle,
+              darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
+            ]}
+          >
+            Hi, User
+          </Text>
+          <Text
+            style={[
+              TodoStyles.headerTitle,
+              darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
+            ]}
+          >
+            Good Morning
+          </Text>
         </View>
         <TouchableOpacity
-          style={styles.button}
+          style={[
+            TodoStyles.button,
+            darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
+          ]}
           onPress={() => {
             console.log(currentMenu);
           }}
         >
-          <AntDesign name="user" size={24} color="#676767" />
+          <AntDesign
+            name="user"
+            size={24}
+            color={darkMode ? "#787878" : "#D4D4D4"}
+          />
         </TouchableOpacity>
       </View>
-      <View style={styles.searchContainer}>
+      <View
+        style={[
+          TodoStyles.searchContainer,
+          darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
+        ]}
+      >
         <AntDesign
           name="search1"
           size={24}
-          color="#676767"
+          color={darkMode ? "#C0C0C0" : "#676767"}
           style={{ marginRight: 20 }}
         />
-        <TextInput placeholder="Search" style={{ flex: 1 }} />
+        <TextInput
+          placeholder="Search"
+          placeholderTextColor={darkMode ? "#C0C0C0" : "#676767"}
+          style={[
+            { flex: 1 },
+            darkMode ? { color: "#C0C0C0" } : { color: "#676767" },
+          ]}
+        />
       </View>
 
-      <View style={styles.labelScreen}>
-        <TouchableOpacity style={styles.labelButton}>
+      <View style={TodoStyles.labelScreen}>
+        <TouchableOpacity style={TodoStyles.labelButton}>
           <Text
             style={[
-              styles.labelText,
-              currentMenu == "Notes" ? styles.labelActive : null,
+              TodoStyles.labelText,
+              currentMenu == "Notes"
+                ? darkMode
+                  ? TodoStyles.labelActive
+                  : { color: "#D4D4D4" }
+                : darkMode
+                ? null
+                : { color: "#797979" },
             ]}
           >
             Notes
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.labelButton}>
+        <TouchableOpacity style={TodoStyles.labelButton}>
           <Text
             style={[
-              styles.labelText,
-              currentMenu == "Todo" ? styles.labelActive : null,
+              TodoStyles.labelText,
+              currentMenu == "Todo"
+                ? darkMode
+                  ? TodoStyles.labelActive
+                  : { color: "#D4D4D4" }
+                : darkMode
+                ? null
+                : { color: "#797979" },
             ]}
           >
             Todo
@@ -139,7 +194,7 @@ const Todo = () => {
       </View>
       <Animated.View
         style={[
-          styles.scrollIndicator,
+          TodoStyles.scrollIndicator,
           {
             transform: [
               {
@@ -156,10 +211,11 @@ const Todo = () => {
               },
             ],
           },
+          darkMode ? null : { backgroundColor: "#D4D4D4" },
         ]}
       />
       <Animated.ScrollView
-        style={styles.scrollHorizontal}
+        style={TodoStyles.scrollHorizontal}
         horizontal={true}
         pagingEnabled={true}
         showsHorizontalScrollIndicator={false}
@@ -208,87 +264,3 @@ const Todo = () => {
 };
 
 export default Todo;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    padding: 20,
-    paddingBottom: 10,
-  },
-  headerContainer: {
-    backgroundColor: "#fff",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: "900",
-    color: "#676767",
-  },
-  button: {
-    backgroundColor: "#F2F2F2",
-    padding: 10,
-    borderRadius: 5,
-  },
-  searchContainer: {
-    backgroundColor: "#EEEEEE",
-    padding: 10,
-    borderRadius: 5,
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 20,
-  },
-  scrollHorizontal: {
-    marginTop: 10,
-    flexDirection: "row",
-  },
-  labelScreen: {
-    flexDirection: "row",
-    marginTop: 10,
-  },
-  labelButton: {
-    padding: 10,
-    marginEnd: 10,
-  },
-  labelText: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#9F9F9F",
-  },
-  labelActive: {
-    color: "#676767",
-    fontWeight: "900",
-  },
-  itemContainer: {
-    backgroundColor: "#CEF1F5",
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-    width: "95%",
-  },
-  itemTitleContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  descriptionContainer: {
-    marginTop: 10,
-    // backgroundColor: "#fff",
-    width: "90%",
-  },
-  scrollIndicator: {
-    height: 4,
-    width: 50,
-    marginTop: -5,
-    backgroundColor: "#676767",
-    borderRadius: 5,
-    marginLeft: 7,
-  },
-});

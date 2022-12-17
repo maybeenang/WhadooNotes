@@ -9,21 +9,62 @@ import {
   Feather,
 } from "@expo/vector-icons";
 
+// import redux
+import { useSelector, useDispatch } from "react-redux";
+import { toggleDarkMode } from "../../redux/features/darkModeSlice";
+
+// import style
+import { SettingsStyles } from "../../styles/HomeStyles/SettingsStyles";
+import { ThemeStyles } from "../../styles/ThemeStyles";
+
 const Profile = () => {
+  const { darkMode } = useSelector((state) => state.darkMode);
+  const dispatch = useDispatch();
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.profileHeader}>
-        <View style={styles.iconUserContainer}>
-          <SimpleLineIcons name="user" size={64} color="black" />
+    <SafeAreaView
+      style={[
+        SettingsStyles.container,
+        darkMode ? ThemeStyles.containerLight : ThemeStyles.containerDark,
+      ]}
+    >
+      <View style={SettingsStyles.profileHeader}>
+        <View
+          style={[
+            SettingsStyles.iconUserContainer,
+            darkMode ? null : ThemeStyles.buttonTodoDark,
+          ]}
+        >
+          <SimpleLineIcons
+            name="user"
+            size={64}
+            color={darkMode ? "#787878" : "#D4D4D4"}
+          />
         </View>
         <View>
-          <Text style={styles.userStyle}>User</Text>
-          <Text style={styles.mailStyle}>user@gmail.com</Text>
-          <TouchableOpacity style={styles.changePictureContainer}>
-            <Octicons name="pencil" size={12} color="black" />
+          <Text
+            style={[
+              SettingsStyles.userStyle,
+              darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
+            ]}
+          >
+            User
+          </Text>
+          <Text style={SettingsStyles.mailStyle}>user@gmail.com</Text>
+          <TouchableOpacity
+            style={[
+              SettingsStyles.changePictureContainer,
+              darkMode ? null : { borderColor: "#D4D4D4" },
+            ]}
+          >
+            <Octicons
+              name="pencil"
+              size={12}
+              color={darkMode ? "#787878" : "#D4D4D4"}
+            />
             <Text
               style={{
-                color: "#676767",
+                color: `${darkMode ? "#787878" : "#D4D4D4"}`,
                 fontSize: 10,
                 marginLeft: 10,
               }}
@@ -33,65 +74,166 @@ const Profile = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.optionContainer}>
-        <Text style={styles.tittleContainer}>Account</Text>
-        <TouchableOpacity style={styles.innerOptionContainer}>
-          <View style={styles.optionDesc}>
+      <View style={SettingsStyles.optionContainer}>
+        <Text
+          style={[
+            SettingsStyles.tittleContainer,
+            darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
+          ]}
+        >
+          Account
+        </Text>
+        <TouchableOpacity
+          style={[
+            SettingsStyles.innerOptionContainer,
+            darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
+          ]}
+        >
+          <View style={SettingsStyles.optionDesc}>
             <MaterialCommunityIcons
               name="lock-outline"
               size={24}
-              color="#676767"
+              color={darkMode ? "#787878" : "#D4D4D4"}
             />
-            <Text style={styles.optionTextDecs}>Change Password</Text>
+            <Text
+              style={[
+                SettingsStyles.optionTextDecs,
+                darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
+              ]}
+            >
+              Change Password
+            </Text>
           </View>
-          <View style={styles.buttonOption}>
-            <MaterialIcons name="arrow-forward-ios" size={12} color="#676767" />
+          <View style={SettingsStyles.buttonOption}>
+            <MaterialIcons
+              name="arrow-forward-ios"
+              size={12}
+              color={darkMode ? "#787878" : "#D4D4D4"}
+            />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.innerOptionContainer}>
-          <View style={styles.optionDesc}>
-            <Feather name="smile" size={24} color="#676767" />
-            <Text style={styles.optionTextDecs}>Change Username</Text>
+        <TouchableOpacity
+          style={[
+            SettingsStyles.innerOptionContainer,
+            darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
+          ]}
+        >
+          <View style={SettingsStyles.optionDesc}>
+            <Feather
+              name="smile"
+              size={24}
+              color={darkMode ? "#787878" : "#D4D4D4"}
+            />
+            <Text
+              style={[
+                SettingsStyles.optionTextDecs,
+                darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
+              ]}
+            >
+              Change Username
+            </Text>
           </View>
-          <View style={styles.buttonOption}>
-            <MaterialIcons name="arrow-forward-ios" size={12} color="#676767" />
+          <View style={SettingsStyles.buttonOption}>
+            <MaterialIcons
+              name="arrow-forward-ios"
+              size={12}
+              color={darkMode ? "#787878" : "#D4D4D4"}
+            />
           </View>
         </TouchableOpacity>
       </View>
-      <View style={styles.optionContainer}>
-        <Text style={styles.tittleContainer}>Theme</Text>
-        <TouchableOpacity style={styles.innerOptionContainer}>
-          <View style={styles.optionDesc}>
-            <Feather name="moon" size={24} color="#676767" />
-            <Text style={styles.optionTextDecs}>Dark Mode</Text>
+      <View style={SettingsStyles.optionContainer}>
+        <Text
+          style={[
+            SettingsStyles.tittleContainer,
+            darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
+          ]}
+        >
+          Theme
+        </Text>
+        <TouchableOpacity
+          style={[
+            SettingsStyles.innerOptionContainer,
+            darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
+          ]}
+          onPress={() => {
+            dispatch(toggleDarkMode());
+          }}
+        >
+          <View style={SettingsStyles.optionDesc}>
+            <Feather
+              name="moon"
+              size={24}
+              color={darkMode ? "#787878" : "#D4D4D4"}
+            />
+            <Text
+              style={[
+                SettingsStyles.optionTextDecs,
+                darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
+              ]}
+            >
+              Dark Mode
+            </Text>
           </View>
           <View>
-            <MaterialCommunityIcons
-              name="toggle-switch-off-outline"
-              size={30}
-              color="black"
-              borderWidth="1"
-            />
+            {darkMode ? (
+              <MaterialCommunityIcons
+                name="toggle-switch-off-outline"
+                size={30}
+                color={darkMode ? "#787878" : "#D4D4D4"}
+                borderWidth="1"
+              />
+            ) : (
+              <MaterialCommunityIcons
+                name="toggle-switch-outline"
+                size={30}
+                color={darkMode ? "#787878" : "#D4D4D4"}
+                borderWidth="1"
+              />
+            )}
           </View>
         </TouchableOpacity>
       </View>
-      <View style={styles.optionContainer}>
-        <Text style={styles.tittleContainer}>Other</Text>
-        <TouchableOpacity style={styles.innerOptionContainer}>
-          <View style={styles.optionDesc}>
+      <View style={SettingsStyles.optionContainer}>
+        <Text
+          style={[
+            SettingsStyles.tittleContainer,
+            darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
+          ]}
+        >
+          Other
+        </Text>
+        <TouchableOpacity
+          style={[
+            SettingsStyles.innerOptionContainer,
+            darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
+          ]}
+        >
+          <View style={SettingsStyles.optionDesc}>
             <MaterialCommunityIcons
               name="folder-open-outline"
               size={24}
-              color="#676767"
+              color={darkMode ? "#787878" : "#D4D4D4"}
             />
-            <Text style={styles.optionTextDecs}>Archived Notes</Text>
+            <Text
+              style={[
+                SettingsStyles.optionTextDecs,
+                darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
+              ]}
+            >
+              Archived Notes
+            </Text>
           </View>
-          <View style={styles.buttonOption}>
-            <MaterialIcons name="arrow-forward-ios" size={12} color="#676767" />
+          <View style={SettingsStyles.buttonOption}>
+            <MaterialIcons
+              name="arrow-forward-ios"
+              size={12}
+              color={darkMode ? "#787878" : "#D4D4D4"}
+            />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.LogOutOptionContainer}>
-          <View style={styles.optionDesc}>
+        <TouchableOpacity style={SettingsStyles.LogOutOptionContainer}>
+          <View style={SettingsStyles.optionDesc}>
             <MaterialCommunityIcons name="exit-run" size={24} color="#FF4E4E" />
             <Text
               style={{

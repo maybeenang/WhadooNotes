@@ -33,4 +33,10 @@ export const ThemeStyles = StyleSheet.create({
     borderBottomColor: "#D4D4D4",
     color: "#D4D4D4",
   },
+  buttonTodoLight: {
+    backgroundColor: "#EEEEEE",
+  },
+  buttonTodoDark: {
+    backgroundColor: "#292929",
+  },
 });
