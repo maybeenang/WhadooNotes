@@ -4,10 +4,23 @@ import { Ionicons } from "@expo/vector-icons";
 import WelcomeSvg from "../assets/flatImage/WelcomeSvg.svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// import redux
+import { useSelector, useDispatch } from "react-redux";
+import { toggleDarkMode } from "../redux/features/darkModeSlice";
+
 const Welcome = ({ navigation }) => {
+  const { darkMode } = useSelector((state) => state.darkMode);
+  const dispatch = useDispatch();
+
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.toggle}>
+      <TouchableOpacity
+        style={styles.toggle}
+        onPress={() => {
+          dispatch(toggleDarkMode());
+          console.log(darkMode);
+        }}
+      >
         <Ionicons name="moon" size={24} color="#292929" />
       </TouchableOpacity>
       <WelcomeSvg width={300} height={300} style={styles.flatImage} />
