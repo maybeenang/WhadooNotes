@@ -12,11 +12,14 @@ import Verify from "./screens/Verify";
 import ResetPassword from "./screens/ResetPassword";
 
 // import navigation
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 // import redux
 import { useSelector } from "react-redux";
@@ -31,6 +34,8 @@ const RootNavigation = () => {
         <Stack.Navigator
           screenOptions={{
             headerShown: false,
+            ...TransitionPresets.SlideFromRightIOS,
+            gestureEnabled: true,
           }}
           initialRouteName="Welcome"
         >
@@ -39,7 +44,13 @@ const RootNavigation = () => {
           <Stack.Screen name="Verify" component={Verify} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="ResetPassword" component={ResetPassword} />
-          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{
+              ...TransitionPresets.ModalFadeTransition,
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

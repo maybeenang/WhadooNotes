@@ -22,6 +22,8 @@ import { ThemeStyles } from "../../styles/ThemeStyles";
 
 const Todo = () => {
   const [currentMenu, setCurrentMenu] = useState("Notes");
+  let x = useRef(new Animated.Value(0)).current;
+  const scrollRef = useRef(null);
 
   const { darkMode } = useSelector((state) => state.darkMode);
 
@@ -93,7 +95,6 @@ const Todo = () => {
     },
   ];
 
-  const x = useRef(new Animated.Value(0)).current;
   return (
     <SafeAreaView
       style={[
@@ -159,7 +160,12 @@ const Todo = () => {
       </View>
 
       <View style={TodoStyles.labelScreen}>
-        <TouchableOpacity style={TodoStyles.labelButton}>
+        <TouchableOpacity
+          style={TodoStyles.labelButton}
+          onPress={() => {
+            scrollRef.current.scrollTo({ x: 0, y: 0 });
+          }}
+        >
           <Text
             style={[
               TodoStyles.labelText,
@@ -175,7 +181,16 @@ const Todo = () => {
             Notes
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={TodoStyles.labelButton}>
+        <TouchableOpacity
+          style={TodoStyles.labelButton}
+          onPress={() => {
+            // setCurrentMenu("Todo");
+            scrollRef.current.scrollTo({
+              x: Dimensions.get("window").width - 40,
+              y: 0,
+            });
+          }}
+        >
           <Text
             style={[
               TodoStyles.labelText,
@@ -228,6 +243,7 @@ const Todo = () => {
             );
           },
         })}
+        ref={scrollRef}
       >
         <View
           style={{
