@@ -9,6 +9,7 @@ import Store from "./src/redux/Store";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 
+// persist store
 let persistor = persistStore(Store);
 
 export default function App() {

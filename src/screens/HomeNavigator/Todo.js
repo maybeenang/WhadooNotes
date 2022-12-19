@@ -17,7 +17,8 @@ import { useEffect, useRef, useState } from "react";
 
 // import redux
 import { useSelector, useDispatch } from "react-redux";
-import { addNote } from "../../redux/features/notesSlice";
+import { getNote, addNote } from "../../redux/features/notesSlice";
+import { getTodo, addTodo } from "../../redux/features/todoSlice";
 import axios from "axios";
 
 // import style
@@ -35,22 +36,26 @@ const Todo = () => {
   const { notes } = useSelector((state) => state.notes);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get("http://192.168.1.10:3000/api/notes", {
-          _id: user.userId,
-        });
+  const getData = async (type) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `http://192.168.1.10:3000/api/${type}/${user.userId}`
+      );
 
-        setLoading(false);
-        console.log(res.data);
-      } catch (e) {
-        setLoading(false);
-        alert(e.res.data.message);
-      }
-    };
-    getData();
+      console.log(response.status);
+      type === "notes" ? dispatch(getNote()) : dispatch(getTodo());
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      alert("Something went wrong, please try again later");
+    }
+  };
+
+  useEffect(() => {
+    getData("notes");
+    getData("todos");
   }, []);
 
   const renderItem = ({ item }) => {
@@ -152,11 +157,11 @@ const Todo = () => {
             TodoStyles.button,
             darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
           ]}
-          onPress={() => {
-            getData().then((data) => {
-              console.log(data);
-            });
-          }}
+          // onPress={() => {
+          //   getData().then((data) => {
+          //     console.log(data);
+          //   });
+          // }}
         >
           <AntDesign
             name="user"
