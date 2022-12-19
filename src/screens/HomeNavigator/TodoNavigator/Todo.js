@@ -92,6 +92,25 @@ const Todo = () => {
   const renderTodo = ({ item }) => {
     return (
       <TouchableOpacity
+        onPress={async () => {
+          try {
+            setLoading(true);
+            const response = await axios.put(
+              `http://192.168.1.10:3000/api/todos`,
+              {
+                userId: user.userId,
+                id: item._id,
+                isCompleted: !item.isCompleted,
+              }
+            );
+
+            dispatch(addTodo(response.data));
+            setLoading(false);
+          } catch (error) {
+            setLoading(false);
+            alert("Something went wrong, please try again later");
+          }
+        }}
         style={[
           TodoStyles.itemContainer,
           {
@@ -107,13 +126,20 @@ const Todo = () => {
             alignItems: "center",
           }}
         >
-          <MaterialIcons name="radio-button-off" size={24} color="#676767" />
+          {!item.isCompleted ? (
+            <MaterialIcons name="radio-button-off" size={24} color="#676767" />
+          ) : (
+            <MaterialIcons name="radio-button-on" size={24} color="#676767" />
+          )}
           <Text
             style={{
               fontSize: 18,
               fontWeight: "500",
               marginLeft: 10,
               color: "#676767",
+              textDecorationLine: item.isCompleted
+                ? "underline line-through"
+                : "none",
             }}
           >
             {item.label}
