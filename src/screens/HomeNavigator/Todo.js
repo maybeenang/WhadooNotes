@@ -8,13 +8,17 @@ import {
   Animated,
 } from "react-native";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { MasonryFlashList } from "@shopify/flash-list";
 
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // import redux
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { addNote } from "../../redux/features/notesSlice";
+import axios from "axios";
 
 // import style
 import { TodoStyles } from "../../styles/HomeStyles/TodoStyles";
@@ -24,8 +28,30 @@ const Todo = () => {
   const [currentMenu, setCurrentMenu] = useState("Notes");
   let x = useRef(new Animated.Value(0)).current;
   const scrollRef = useRef(null);
+  const dispatch = useDispatch();
 
   const { darkMode } = useSelector((state) => state.darkMode);
+  const { user } = useSelector((state) => state.auth);
+  const { notes } = useSelector((state) => state.notes);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get("http://192.168.1.10:3000/api/notes", {
+          _id: user.userId,
+        });
+
+        setLoading(false);
+        console.log(res.data);
+      } catch (e) {
+        setLoading(false);
+        alert(e.res.data.message);
+      }
+    };
+    getData();
+  }, []);
 
   const renderItem = ({ item }) => {
     return (
@@ -127,7 +153,9 @@ const Todo = () => {
             darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
           ]}
           onPress={() => {
-            console.log(currentMenu);
+            getData().then((data) => {
+              console.log(data);
+            });
           }}
         >
           <AntDesign

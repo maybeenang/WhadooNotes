@@ -15,6 +15,7 @@ import { ThemeStyles } from "../styles/ThemeStyles";
 
 const Welcome = ({ navigation }) => {
   const { darkMode } = useSelector((state) => state.darkMode);
+  const { loggedIn } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   return (

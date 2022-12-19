@@ -26,6 +26,7 @@ import { useSelector } from "react-redux";
 
 const RootNavigation = () => {
   const { darkMode } = useSelector((state) => state.darkMode);
+  const { loggedIn } = useSelector((state) => state.auth);
 
   return (
     <SafeAreaProvider>
@@ -37,20 +38,21 @@ const RootNavigation = () => {
             ...TransitionPresets.SlideFromRightIOS,
             gestureEnabled: true,
           }}
-          initialRouteName="Welcome"
+          initialRouteName={loggedIn ? "Home" : "Welcome"}
         >
-          <Stack.Screen name="Welcome" component={Welcome} />
-          <Stack.Screen name="Register" component={Register} />
-          <Stack.Screen name="Verify" component={Verify} />
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="ResetPassword" component={ResetPassword} />
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{
-              ...TransitionPresets.ModalFadeTransition,
-            }}
-          />
+          {loggedIn ? (
+            <>
+              <Stack.Screen name="Home" component={Home} />
+            </>
+          ) : (
+            <>
+              <Stack.Screen name="Welcome" component={Welcome} />
+              <Stack.Screen name="Register" component={Register} />
+              <Stack.Screen name="Verify" component={Verify} />
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="ResetPassword" component={ResetPassword} />
+            </>
+          )}
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

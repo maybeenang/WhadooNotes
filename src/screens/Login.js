@@ -10,9 +10,12 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, AntDesign, MaterialIcons } from "@expo/vector-icons";
 import SignIn from "../assets/flatImage/SignIn.svg";
+import { useState } from "react";
 
 // import redux
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/features/authSlice";
+import axios from "axios";
 
 // import styles
 import { LoginStyles } from "../styles/LoginStyles";
@@ -20,6 +23,11 @@ import { ThemeStyles } from "../styles/ThemeStyles";
 
 const Login = ({ navigation }) => {
   const { darkMode } = useSelector((state) => state.darkMode);
+  const { user } = useSelector((state) => state.auth);
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   return (
     <KeyboardAvoidingView
@@ -65,6 +73,8 @@ const Login = ({ navigation }) => {
               style={{ marginRight: 20 }}
             />
             <TextInput
+              onChangeText={(text) => setEmail(text)}
+              value={email}
               style={[
                 LoginStyles.input,
                 darkMode ? ThemeStyles.inputLight : ThemeStyles.inputDark,
@@ -81,6 +91,8 @@ const Login = ({ navigation }) => {
               style={{ marginRight: 20 }}
             />
             <TextInput
+              onChangeText={(text) => setPassword(text)}
+              value={password}
               style={[
                 LoginStyles.input,
                 darkMode ? ThemeStyles.inputLight : ThemeStyles.inputDark,
@@ -124,12 +136,46 @@ const Login = ({ navigation }) => {
             </TouchableOpacity>
           </View>
           <TouchableOpacity
+            disabled={loading}
             style={[
               LoginStyles.button,
               darkMode ? ThemeStyles.buttonLight : ThemeStyles.buttonDark,
             ]}
-            onPress={() => {
-              navigation.navigate("Home");
+            onPress={async () => {
+              try {
+                if (email === "" || password === "") {
+                  alert("Please fill in all fields");
+                  return;
+                }
+
+                setLoading(true);
+                const response = await axios.post(
+                  "http://192.168.1.10:3000/api/auth",
+                  {
+                    email,
+                    password,
+                  }
+                );
+                // console.log(response);
+
+                if (response.status == 200) {
+                  alert("Login Successful");
+                  dispatch(login(response.data));
+                  navigation.navigate("Home");
+                } else {
+                  alert(res.data.message);
+                }
+                setLoading(false);
+              } catch (error) {
+                console.log(error);
+                if (error.response.status == 402) {
+                  alert(error.response.data.message);
+                  navigation.navigate("Verify");
+                } else {
+                  alert(error.response.data.message);
+                }
+                setLoading(false);
+              }
             }}
           >
             <Text
@@ -138,7 +184,7 @@ const Login = ({ navigation }) => {
                 darkMode ? { color: "#fff" } : { color: "#4B4B4B" },
               ]}
             >
-              Sign In
+              {loading ? "Loading..." : "Sign In"}
             </Text>
           </TouchableOpacity>
 

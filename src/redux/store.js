@@ -1,6 +1,8 @@
 // configure store
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import darkModeReducer from "./features/darkModeSlice";
+import authReducer from "./features/authSlice";
+import notesReducer from "./features/notesSlice";
 import { persistReducer } from "redux-persist";
 import thunk from "redux-thunk";
 
@@ -14,6 +16,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   darkMode: darkModeReducer,
+  auth: authReducer,
+  notes: notesReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
