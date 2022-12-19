@@ -19,6 +19,7 @@ const rootReducer = combineReducers({
   darkMode: darkModeReducer,
   auth: authReducer,
   notes: notesReducer,
+  todo: todoReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,4 +1,4 @@
-import { AntDesign, Entypo } from "@expo/vector-icons";
+import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
 import {
   Text,
   TextInput,
@@ -34,6 +34,7 @@ const Todo = () => {
   const { darkMode } = useSelector((state) => state.darkMode);
   const { user } = useSelector((state) => state.auth);
   const { notes } = useSelector((state) => state.notes);
+  const { todo } = useSelector((state) => state.todo);
   const [loading, setLoading] = useState(false);
 
   const getData = async (type) => {
@@ -42,9 +43,9 @@ const Todo = () => {
       const response = await axios.get(
         `http://192.168.1.10:3000/api/${type}/${user.userId}`
       );
-
-      console.log(response.status);
-      type === "notes" ? dispatch(getNote()) : dispatch(getTodo());
+      type === "notes"
+        ? dispatch(getNote(response.data))
+        : dispatch(getTodo(response.data));
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -81,50 +82,42 @@ const Todo = () => {
     );
   };
 
-  let todoData = [
-    {
-      id: 1,
-      title: "Buy Milk",
-      description: "Buy 2L Milk ",
-      pinned: true,
-    },
-    {
-      id: 2,
-      title: "Buy Bread",
-      description: "Buy 2 Loaves of dnsajdaks dsa djas dakd kad akjdslad ak",
-      pinned: false,
-    },
-    {
-      id: 3,
-      title: "Buy Eggs",
-      description: "Buy 12 Eggs",
-      pinned: false,
-    },
-    {
-      id: 4,
-      title: "Buy Milk",
-      description: "Buy 2L Milk",
-      pinned: true,
-    },
-    {
-      id: 5,
-      title: "Buy Bread",
-      description: "Buy 2 Loaves of Bread",
-      pinned: false,
-    },
-    {
-      id: 6,
-      title: "Buy Eggs",
-      description: "Buy 12 Eggs",
-      pinned: false,
-    },
-    {
-      id: 7,
-      title: "Buy Milk",
-      description: "Buy 2L Milk",
-      pinned: true,
-    },
-  ];
+  const renderTodo = ({ item }) => {
+    return (
+      <TouchableOpacity
+        style={[
+          TodoStyles.itemContainer,
+          {
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          },
+        ]}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <MaterialIcons name="radio-button-off" size={24} color="#676767" />
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "500",
+              marginLeft: 10,
+              color: "#676767",
+            }}
+          >
+            {item.label}
+          </Text>
+        </View>
+        <TouchableOpacity>
+          <Entypo name="dots-three-vertical" size={16} color="#676767" />
+        </TouchableOpacity>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <SafeAreaView
@@ -141,7 +134,9 @@ const Todo = () => {
               darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
             ]}
           >
-            Hi, User
+            Hi,{" "}
+            {user.name.split(" ")[0].charAt(0).toUpperCase() +
+              user.name.split(" ")[0].slice(1)}
           </Text>
           <Text
             style={[
@@ -149,7 +144,14 @@ const Todo = () => {
               darkMode ? ThemeStyles.titleLight : ThemeStyles.titleDark,
             ]}
           >
-            Good Morning
+            Good{" "}
+            {new Date().getHours() < 12
+              ? "Morning"
+              : new Date().getHours() < 17
+              ? "Afternoon"
+              : new Date().getHours() < 20
+              ? "Evening"
+              : "Night"}
           </Text>
         </View>
         <TouchableOpacity
@@ -284,13 +286,29 @@ const Todo = () => {
             paddingHorizontal: 10,
           }}
         >
-          <MasonryFlashList
-            data={todoData}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            numColumns={2}
-            estimatedItemSize={100}
-          />
+          {notes.note.length === 0 ? (
+            <Text
+              style={[
+                { textAlign: "center", marginTop: 20 },
+                darkMode
+                  ? {
+                      color: "#C0C0C0",
+                    }
+                  : { color: "#D4D4D4" },
+              ]}
+            >
+              You don't have any notes. {"\n"} Click on the + button to add a
+              note.
+            </Text>
+          ) : (
+            <MasonryFlashList
+              data={notes.note}
+              renderItem={renderItem}
+              keyExtractor={(item) => item._id}
+              numColumns={2}
+              estimatedItemSize={100}
+            />
+          )}
         </View>
 
         <View
@@ -300,12 +318,28 @@ const Todo = () => {
             paddingHorizontal: 5,
           }}
         >
-          <MasonryFlashList
-            data={todoData}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            estimatedItemSize={100}
-          />
+          {todo.todo.length === 0 ? (
+            <Text
+              style={[
+                { textAlign: "center", marginTop: 20, marginStart: 5 },
+                darkMode
+                  ? {
+                      color: "#C0C0C0",
+                    }
+                  : { color: "#D4D4D4" },
+              ]}
+            >
+              You don't have any todo.{"\n"} Click on the + button to add a
+              todo.
+            </Text>
+          ) : (
+            <MasonryFlashList
+              data={todoData}
+              renderItem={renderTodo}
+              keyExtractor={(item) => item.id}
+              estimatedItemSize={100}
+            />
+          )}
         </View>
       </Animated.ScrollView>
     </SafeAreaView>
