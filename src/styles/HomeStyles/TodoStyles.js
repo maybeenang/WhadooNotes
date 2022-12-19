@@ -31,12 +31,12 @@ export const TodoStyles = StyleSheet.create({
     marginTop: 20,
   },
   scrollHorizontal: {
-    marginTop: 10,
+    marginTop: 30,
     flexDirection: "row",
   },
   labelScreen: {
     flexDirection: "row",
-    marginTop: 10,
+    marginTop: 20,
   },
   labelButton: {
     padding: 10,

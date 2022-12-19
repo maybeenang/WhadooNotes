@@ -8,34 +8,41 @@ import {
   Animated,
 } from "react-native";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import Modal from "react-native-modal";
 
 import { MasonryFlashList } from "@shopify/flash-list";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useRef, useState } from "react";
 
+import { useNavigation } from "@react-navigation/native";
+
 // import redux
 import { useSelector, useDispatch } from "react-redux";
-import { getNote, addNote } from "../../redux/features/notesSlice";
-import { getTodo, addTodo } from "../../redux/features/todoSlice";
+import { getNote, addNote } from "../../../redux/features/notesSlice";
+import { getTodo, addTodo } from "../../../redux/features/todoSlice";
 import axios from "axios";
 
 // import style
-import { TodoStyles } from "../../styles/HomeStyles/TodoStyles";
-import { ThemeStyles } from "../../styles/ThemeStyles";
+import { TodoStyles } from "../../../styles/HomeStyles/TodoStyles";
+import { ThemeStyles } from "../../../styles/ThemeStyles";
 
 const Todo = () => {
-  const [currentMenu, setCurrentMenu] = useState("Notes");
   let x = useRef(new Animated.Value(0)).current;
   const scrollRef = useRef(null);
   const dispatch = useDispatch();
+
+  const navigation = useNavigation();
 
   const { darkMode } = useSelector((state) => state.darkMode);
   const { user } = useSelector((state) => state.auth);
   const { notes } = useSelector((state) => state.notes);
   const { todo } = useSelector((state) => state.todo);
+
+  const [currentMenu, setCurrentMenu] = useState("Notes");
   const [loading, setLoading] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [tempTodoText, setTempTodoText] = useState("");
 
   const getData = async (type) => {
     try {
@@ -135,8 +142,8 @@ const Todo = () => {
             ]}
           >
             Hi,{" "}
-            {user.name.split(" ")[0].charAt(0).toUpperCase() +
-              user.name.split(" ")[0].slice(1)}
+            {user?.name.split(" ")[0].charAt(0).toUpperCase() +
+              user?.name.split(" ")[0].slice(1)}
           </Text>
           <Text
             style={[
@@ -159,11 +166,7 @@ const Todo = () => {
             TodoStyles.button,
             darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
           ]}
-          // onPress={() => {
-          //   getData().then((data) => {
-          //     console.log(data);
-          //   });
-          // }}
+          onPress={() => {}}
         >
           <AntDesign
             name="user"
@@ -194,52 +197,80 @@ const Todo = () => {
         />
       </View>
 
-      <View style={TodoStyles.labelScreen}>
-        <TouchableOpacity
-          style={TodoStyles.labelButton}
-          onPress={() => {
-            scrollRef.current.scrollTo({ x: 0, y: 0 });
-          }}
-        >
-          <Text
-            style={[
-              TodoStyles.labelText,
-              currentMenu == "Notes"
-                ? darkMode
-                  ? TodoStyles.labelActive
-                  : { color: "#D4D4D4" }
-                : darkMode
-                ? null
-                : { color: "#797979" },
-            ]}
+      <View
+        style={[
+          TodoStyles.labelScreen,
+          {
+            // backgroundColor: "red",
+            justifyContent: "space-between",
+            alignItems: "center",
+          },
+        ]}
+      >
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            style={TodoStyles.labelButton}
+            onPress={() => {
+              scrollRef.current.scrollTo({ x: 0, y: 0 });
+            }}
           >
-            Notes
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={TodoStyles.labelButton}
-          onPress={() => {
-            // setCurrentMenu("Todo");
-            scrollRef.current.scrollTo({
-              x: Dimensions.get("window").width - 40,
-              y: 0,
-            });
-          }}
-        >
-          <Text
-            style={[
-              TodoStyles.labelText,
-              currentMenu == "Todo"
-                ? darkMode
-                  ? TodoStyles.labelActive
-                  : { color: "#D4D4D4" }
-                : darkMode
-                ? null
-                : { color: "#797979" },
-            ]}
+            <Text
+              style={[
+                TodoStyles.labelText,
+                currentMenu == "Notes"
+                  ? darkMode
+                    ? TodoStyles.labelActive
+                    : { color: "#D4D4D4" }
+                  : darkMode
+                  ? null
+                  : { color: "#797979" },
+              ]}
+            >
+              Notes
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={TodoStyles.labelButton}
+            onPress={() => {
+              // setCurrentMenu("Todo");
+              scrollRef.current.scrollTo({
+                x: Dimensions.get("window").width - 40,
+                y: 0,
+              });
+            }}
           >
-            Todo
-          </Text>
+            <Text
+              style={[
+                TodoStyles.labelText,
+                currentMenu == "Todo"
+                  ? darkMode
+                    ? TodoStyles.labelActive
+                    : { color: "#D4D4D4" }
+                  : darkMode
+                  ? null
+                  : { color: "#797979" },
+              ]}
+            >
+              Todo
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            currentMenu == "Notes"
+              ? navigation.navigate("TodoStack", { screen: "AddTodo" })
+              : setModalVisible(true);
+          }}
+          style={[
+            TodoStyles.button,
+            darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
+          ]}
+        >
+          <AntDesign
+            name="plus"
+            size={24}
+            color={darkMode ? "#787878" : "#D4D4D4"}
+          />
         </TouchableOpacity>
       </View>
       <Animated.View
@@ -286,7 +317,7 @@ const Todo = () => {
             paddingHorizontal: 10,
           }}
         >
-          {notes.note.length === 0 ? (
+          {notes?.note.length === 0 ? (
             <Text
               style={[
                 { textAlign: "center", marginTop: 20 },
@@ -318,7 +349,7 @@ const Todo = () => {
             paddingHorizontal: 5,
           }}
         >
-          {todo.todo.length === 0 ? (
+          {todo?.todo.length === 0 ? (
             <Text
               style={[
                 { textAlign: "center", marginTop: 20, marginStart: 5 },
@@ -334,14 +365,138 @@ const Todo = () => {
             </Text>
           ) : (
             <MasonryFlashList
-              data={todoData}
+              data={todo.todo}
               renderItem={renderTodo}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item._id}
               estimatedItemSize={100}
             />
           )}
         </View>
       </Animated.ScrollView>
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={() => setModalVisible(false)}
+        onBackButtonPress={() => setModalVisible(false)}
+        backdropColor={darkMode ? "#1E1E1E" : "#F2F2F2"}
+        backdropOpacity={0.8}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        animationInTiming={500}
+        animationOutTiming={1000}
+        backdropTransitionInTiming={500}
+        useNativeDriverForBackdrop={true}
+        backdropTransitionOutTiming={800}
+        style={{ margin: 0, justifyContent: "flex-end" }}
+      >
+        <View
+          style={{
+            backgroundColor: darkMode ? "#1E1E1E" : "#F2F2F2",
+            padding: 20,
+            borderRadius: 10,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              color: darkMode ? "#D4D4D4" : "#1E1E1E",
+              textAlign: "center",
+            }}
+          >
+            Add Todo
+          </Text>
+          <TextInput
+            value={tempTodoText}
+            onChangeText={(text) => setTempTodoText(text)}
+            style={{
+              backgroundColor: darkMode ? "#2C2C2C" : "#E5E5E5",
+              borderRadius: 10,
+              padding: 10,
+              marginTop: 10,
+              color: darkMode ? "#D4D4D4" : "#1E1E1E",
+              fontSize: 16,
+            }}
+            placeholder="Title"
+            placeholderTextColor={darkMode ? "#a2a2a2" : "#1E1E1E"}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginTop: 10,
+              marginBottom: 10,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(false);
+              }}
+              style={{
+                backgroundColor: darkMode ? "#2C2C2C" : "#E5E5E5",
+                borderRadius: 10,
+                padding: 10,
+                marginTop: 10,
+                color: darkMode ? "#D4D4D4" : "#1E1E1E",
+                fontSize: 16,
+                width: "45%",
+              }}
+            >
+              <Text
+                style={{
+                  color: "#FB0400",
+                  fontSize: 16,
+                  textAlign: "center",
+                }}
+              >
+                Cancel
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              disabled={loading}
+              onPress={async () => {
+                try {
+                  setLoading(true);
+                  const res = await axios.post(
+                    "http://192.168.1.10:3000/api/todos",
+                    {
+                      userId: user.userId,
+                      label: tempTodoText,
+                    }
+                  );
+
+                  dispatch(addTodo(res.data));
+                  setTempTodoText("");
+                  setLoading(false);
+                  setModalVisible(false);
+                } catch (error) {
+                  console.log(error);
+                  setLoading(false);
+                }
+                // console.log(user);
+              }}
+              style={{
+                backgroundColor: darkMode ? "#2C2C2C" : "#E5E5E5",
+                borderRadius: 10,
+                padding: 10,
+                marginTop: 10,
+                color: darkMode ? "#D4D4D4" : "#1E1E1E",
+                fontSize: 16,
+                width: "45%",
+              }}
+            >
+              <Text
+                style={{
+                  color: "#007AFF",
+                  fontSize: 16,
+                  textAlign: "center",
+                }}
+              >
+                {loading ? "Loading..." : "Done"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };

@@ -2,11 +2,10 @@ import { AntDesign } from "@expo/vector-icons";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-const Tab = createBottomTabNavigator();
-
-import Todo from "./HomeNavigator/Todo";
+import TodoStack from "./HomeNavigator/TodoStack";
 import Settings from "./HomeNavigator/Settings";
-import AddTodo from "./HomeNavigator/AddTodo";
+
+const Tab = createBottomTabNavigator();
 
 // import redux
 import { useSelector } from "react-redux";
@@ -20,12 +19,10 @@ const Home = () => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === "Todo") {
+          if (route.name === "TodoStack") {
             iconName = focused ? "home" : "home";
           } else if (route.name === "Settings") {
             iconName = focused ? "setting" : "setting";
-          } else if (route.name === "AddTodo") {
-            iconName = focused ? "pluscircleo" : "pluscircleo";
           }
           return <AntDesign name={iconName} size={size} color={color} />;
         },
@@ -35,13 +32,13 @@ const Home = () => {
           backgroundColor: `${darkMode ? "#fff" : "#4B4B4B"}`,
           borderTopWidth: 0,
           elevation: 0,
+          display: route.name === "AddTodo" ? "none" : "flex",
         },
         headerShown: false,
         tabBarShowLabel: false,
       })}
     >
-      <Tab.Screen name="Todo" component={Todo} />
-      <Tab.Screen name="AddTodo" component={AddTodo} />
+      <Tab.Screen name="TodoStack" component={TodoStack} />
       <Tab.Screen name="Settings" component={Settings} />
     </Tab.Navigator>
   );

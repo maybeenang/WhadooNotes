@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Octicons,
@@ -22,6 +22,10 @@ const Profile = () => {
   const { darkMode } = useSelector((state) => state.darkMode);
   const { user, loggedIn } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("Profile");
+  }, []);
 
   return (
     <SafeAreaView
@@ -236,7 +240,6 @@ const Profile = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            // console.log(loggedIn);
             dispatch(logout());
           }}
           style={SettingsStyles.LogOutOptionContainer}
