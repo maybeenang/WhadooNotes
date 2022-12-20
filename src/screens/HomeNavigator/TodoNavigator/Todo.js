@@ -42,6 +42,7 @@ const Todo = () => {
   const [currentMenu, setCurrentMenu] = useState("Notes");
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [visibleModalTodo, setVisibleModalTodo] = useState(false);
   const [tempTodoText, setTempTodoText] = useState("");
 
   const getData = async (type) => {
@@ -77,7 +78,12 @@ const Todo = () => {
             <TouchableOpacity>
               <Entypo name="pin" size={16} color="#676767" />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setVisibleModalTodo(!visibleModalTodo);
+                // setTempTodoText(item.description);
+              }}
+            >
               <Entypo name="dots-three-vertical" size={16} color="#676767" />
             </TouchableOpacity>
           </View>
@@ -136,7 +142,7 @@ const Todo = () => {
               fontSize: 18,
               fontWeight: "500",
               marginLeft: 10,
-              color: "#676767",
+              color: item.isCompleted ? "black" : "#676767",
               textDecorationLine: item.isCompleted
                 ? "underline line-through"
                 : "none",
@@ -521,6 +527,98 @@ const Todo = () => {
               </Text>
             </TouchableOpacity>
           </View>
+        </View>
+      </Modal>
+      <Modal
+        isVisible={visibleModalTodo}
+        onBackdropPress={() => setVisibleModalTodo(false)}
+        onBackButtonPress={() => setVisibleModalTodo(false)}
+        backdropColor={darkMode ? "#1E1E1E" : "#F2F2F2"}
+        backdropOpacity={0.8}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        animationInTiming={500}
+        animationOutTiming={1000}
+        backdropTransitionInTiming={500}
+        useNativeDriverForBackdrop={true}
+        backdropTransitionOutTiming={800}
+        style={{ margin: 0, justifyContent: "flex-end" }}
+      >
+        <View
+          style={{
+            backgroundColor: darkMode ? "#1E1E1E" : "#F2F2F2",
+            // backgroundColor: "red",
+            padding: 20,
+            borderRadius: 10,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              color: darkMode ? "#D4D4D4" : "#1E1E1E",
+              textAlign: "center",
+              borderBottomColor: darkMode ? "#2C2C2C" : "#E5E5E5",
+              borderBottomWidth: 1,
+              paddingBottom: 10,
+            }}
+          >
+            Add Todo
+          </Text>
+          <TouchableOpacity
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: 10,
+              marginBottom: 10,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                color: darkMode ? "#D4D4D4" : "#1E1E1E",
+              }}
+            >
+              Pin
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: 10,
+              marginBottom: 10,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                color: darkMode ? "#D4D4D4" : "#1E1E1E",
+              }}
+            >
+              Archive
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: 10,
+              marginBottom: 10,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                color: darkMode ? "#D4D4D4" : "#1E1E1E",
+              }}
+            >
+              Delete
+            </Text>
+          </TouchableOpacity>
         </View>
       </Modal>
     </SafeAreaView>
