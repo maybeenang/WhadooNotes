@@ -5,6 +5,7 @@ import {
 // import { NavigationContainer } from "@react-navigation/native";
 import Todo from "./TodoNavigator/Todo";
 import AddTodo from "./TodoNavigator/AddTodo";
+import EditTodo from "./TodoNavigator/EditTodo";
 
 const TodoNav = createStackNavigator();
 
@@ -20,6 +21,7 @@ const TodoStack = () => {
     >
       <TodoNav.Screen name="Todo" component={Todo} />
       <TodoNav.Screen name="AddTodo" component={AddTodo} />
+      <TodoNav.Screen name="EditTodo" component={EditTodo} />
     </TodoNav.Navigator>
   );
 };

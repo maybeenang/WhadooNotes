@@ -62,6 +62,9 @@ const Profile = () => {
               SettingsStyles.changePictureContainer,
               darkMode ? null : { borderColor: "#D4D4D4" },
             ]}
+            onPress={() => {
+              alert("Coming Soon!");
+            }}
           >
             <Octicons
               name="pencil"
@@ -94,6 +97,9 @@ const Profile = () => {
             SettingsStyles.innerOptionContainer,
             darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
           ]}
+          onPress={() => {
+            alert("Coming Soon!");
+          }}
         >
           <View style={SettingsStyles.optionDesc}>
             <MaterialCommunityIcons
@@ -123,6 +129,9 @@ const Profile = () => {
             SettingsStyles.innerOptionContainer,
             darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
           ]}
+          onPress={() => {
+            alert("Coming Soon!");
+          }}
         >
           <View style={SettingsStyles.optionDesc}>
             <Feather
@@ -214,6 +223,9 @@ const Profile = () => {
             SettingsStyles.innerOptionContainer,
             darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
           ]}
+          onPress={() => {
+            alert("Coming Soon!");
+          }}
         >
           <View style={SettingsStyles.optionDesc}>
             <MaterialCommunityIcons

@@ -100,7 +100,7 @@ const ResetPassword = ({ navigation }) => {
           darkMode ? ThemeStyles.buttonLight : ThemeStyles.buttonDark,
         ]}
         onPress={() => {
-          navigation.navigate("Login");
+          alert("Coming Soon!");
         }}
       >
         <Text

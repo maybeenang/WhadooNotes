@@ -121,6 +121,7 @@ const Register = ({ navigation }) => {
                 RegisterStyles.input,
                 darkMode ? ThemeStyles.inputLight : ThemeStyles.inputDark,
               ]}
+              secureTextEntry={true}
               placeholder="Password"
               placeholderTextColor={darkMode ? "#D4D4D4" : "#A5A5A5"}
               onChangeText={(text) => setPassword(text)}
@@ -138,6 +139,7 @@ const Register = ({ navigation }) => {
                 RegisterStyles.input,
                 darkMode ? ThemeStyles.inputLight : ThemeStyles.inputDark,
               ]}
+              secureTextEntry={true}
               placeholder="Re-enter Password"
               placeholderTextColor={darkMode ? "#D4D4D4" : "#A5A5A5"}
               onChangeText={(text) => setPassword2(text)}

@@ -43,7 +43,10 @@ const Todo = () => {
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [visibleModalTodo, setVisibleModalTodo] = useState(false);
+  const [modalTodo, setModalTodo] = useState(false);
+  const [selectTodo, setSelectTodo] = useState(null);
   const [tempTodoText, setTempTodoText] = useState("");
+  const [selectNote, setSelectNote] = useState(null);
 
   const getData = async (type) => {
     try {
@@ -68,94 +71,130 @@ const Todo = () => {
   }, []);
 
   const renderItem = ({ item }) => {
-    return (
-      <TouchableOpacity style={TodoStyles.itemContainer}>
-        <View style={TodoStyles.itemTitleContainer}>
-          <Text style={{ fontSize: 20, fontWeight: "600", color: "#676767" }}>
-            {item.title}
-          </Text>
-          <View style={TodoStyles.buttonContainer}>
-            <TouchableOpacity>
+    if (item.isDeleted) {
+      return;
+    } else {
+      return (
+        <TouchableOpacity
+          style={TodoStyles.itemContainer}
+          onPress={() => {
+            navigation.navigate("TodoStack", {
+              screen: "EditTodo",
+              params: {
+                oldTitle: item.title,
+                oldContent: item.description,
+                userId: user.userId,
+                noteId: item._id,
+              },
+            });
+          }}
+        >
+          <View style={TodoStyles.itemTitleContainer}>
+            <Text style={{ fontSize: 20, fontWeight: "600", color: "#676767" }}>
+              {item.title}
+            </Text>
+            <View style={TodoStyles.buttonContainer}>
+              {/* <TouchableOpacity>
               <Entypo name="pin" size={16} color="#676767" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setVisibleModalTodo(!visibleModalTodo);
-                // setTempTodoText(item.description);
-              }}
-            >
-              <Entypo name="dots-three-vertical" size={16} color="#676767" />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+              <TouchableOpacity
+                onPress={() => {
+                  setVisibleModalTodo(true);
+                  setSelectNote({
+                    userId: user.userId,
+                    id: item._id,
+                  });
+                }}
+              >
+                <Entypo name="dots-three-vertical" size={16} color="#676767" />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-        <View style={TodoStyles.descriptionContainer}>
-          <Text style={{ fontSize: 18 }}>{item.description}</Text>
-        </View>
-      </TouchableOpacity>
-    );
+          <View style={TodoStyles.descriptionContainer}>
+            <Text style={{ fontSize: 18 }}>{item.description}</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
   };
 
   const renderTodo = ({ item }) => {
-    return (
-      <TouchableOpacity
-        onPress={async () => {
-          try {
-            setLoading(true);
-            const response = await axios.put(
-              `http://192.168.1.10:3000/api/todos`,
-              {
-                userId: user.userId,
-                id: item._id,
-                isCompleted: !item.isCompleted,
-              }
-            );
+    if (item.isDeleted) {
+      return;
+    } else {
+      return (
+        <TouchableOpacity
+          onPress={async () => {
+            try {
+              setLoading(true);
+              const response = await axios.put(
+                `http://192.168.1.10:3000/api/todos`,
+                {
+                  userId: user.userId,
+                  id: item._id,
+                  isCompleted: !item.isCompleted,
+                }
+              );
 
-            dispatch(addTodo(response.data));
-            setLoading(false);
-          } catch (error) {
-            setLoading(false);
-            alert("Something went wrong, please try again later");
-          }
-        }}
-        style={[
-          TodoStyles.itemContainer,
-          {
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          },
-        ]}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
+              dispatch(addTodo(response.data));
+              setLoading(false);
+            } catch (error) {
+              setLoading(false);
+              alert("Something went wrong, please try again later");
+            }
           }}
+          style={[
+            TodoStyles.itemContainer,
+            {
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            },
+          ]}
         >
-          {!item.isCompleted ? (
-            <MaterialIcons name="radio-button-off" size={24} color="#676767" />
-          ) : (
-            <MaterialIcons name="radio-button-on" size={24} color="#676767" />
-          )}
-          <Text
+          <View
             style={{
-              fontSize: 18,
-              fontWeight: "500",
-              marginLeft: 10,
-              color: item.isCompleted ? "black" : "#676767",
-              textDecorationLine: item.isCompleted
-                ? "underline line-through"
-                : "none",
+              flexDirection: "row",
+              alignItems: "center",
             }}
           >
-            {item.label}
-          </Text>
-        </View>
-        <TouchableOpacity>
-          <Entypo name="dots-three-vertical" size={16} color="#676767" />
+            {!item.isCompleted ? (
+              <MaterialIcons
+                name="radio-button-off"
+                size={24}
+                color="#676767"
+              />
+            ) : (
+              <MaterialIcons name="radio-button-on" size={24} color="#676767" />
+            )}
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "500",
+                marginLeft: 10,
+                color: item.isCompleted ? "black" : "#676767",
+                textDecorationLine: item.isCompleted
+                  ? "underline line-through"
+                  : "none",
+              }}
+            >
+              {item.label}
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              setModalTodo(true);
+              setSelectTodo({
+                userId: user.userId,
+                id: item._id,
+              });
+            }}
+          >
+            <Entypo name="dots-three-vertical" size={16} color="#676767" />
+          </TouchableOpacity>
         </TouchableOpacity>
-      </TouchableOpacity>
-    );
+      );
+    }
   };
 
   return (
@@ -198,10 +237,14 @@ const Todo = () => {
             TodoStyles.button,
             darkMode ? ThemeStyles.buttonTodoLight : ThemeStyles.buttonTodoDark,
           ]}
-          onPress={() => {}}
+          onPress={() => {
+            alert(
+              "WhadooNotes Inc.\nVersion 1.0.0\n© 2022\n\nAndre Riantasa Wijaya\n@henhen02 (Hendri)\nDaffa Sandri Ramadhan\nBagus Ardin Saputra\n@maybeenang (Elang)"
+            );
+          }}
         >
           <AntDesign
-            name="user"
+            name="infocirlce"
             size={24}
             color={darkMode ? "#787878" : "#D4D4D4"}
           />
@@ -349,7 +392,7 @@ const Todo = () => {
             paddingHorizontal: 10,
           }}
         >
-          {notes?.note.length === 0 ? (
+          {!notes ? (
             <Text
               style={[
                 { textAlign: "center", marginTop: 20 },
@@ -365,7 +408,7 @@ const Todo = () => {
             </Text>
           ) : (
             <MasonryFlashList
-              data={notes.note}
+              data={notes?.note}
               renderItem={renderItem}
               keyExtractor={(item) => item._id}
               numColumns={2}
@@ -381,7 +424,7 @@ const Todo = () => {
             paddingHorizontal: 5,
           }}
         >
-          {todo?.todo.length === 0 ? (
+          {!todo || todo == undefined ? (
             <Text
               style={[
                 { textAlign: "center", marginTop: 20, marginStart: 5 },
@@ -397,7 +440,7 @@ const Todo = () => {
             </Text>
           ) : (
             <MasonryFlashList
-              data={todo.todo}
+              data={todo?.todo}
               renderItem={renderTodo}
               keyExtractor={(item) => item._id}
               estimatedItemSize={100}
@@ -563,7 +606,7 @@ const Todo = () => {
               paddingBottom: 10,
             }}
           >
-            Add Todo
+            Options
           </Text>
           <TouchableOpacity
             style={{
@@ -572,6 +615,9 @@ const Todo = () => {
               alignItems: "center",
               marginTop: 10,
               marginBottom: 10,
+            }}
+            onPress={() => {
+              alert("Coming Soon!");
             }}
           >
             <Text
@@ -591,6 +637,9 @@ const Todo = () => {
               marginTop: 10,
               marginBottom: 10,
             }}
+            onPress={() => {
+              alert("Coming Soon!");
+            }}
           >
             <Text
               style={{
@@ -602,6 +651,28 @@ const Todo = () => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={async () => {
+              try {
+                setLoading(true);
+
+                const res = await axios.put(
+                  "http://192.168.1.10:3000/api/notes",
+                  {
+                    noteId: selectNote.id,
+                    userId: user.userId,
+                    isDeleted: true,
+                  }
+                );
+
+                dispatch(addNote(res.data));
+                setVisibleModalTodo(false);
+                setLoading(false);
+              } catch (error) {
+                console.log(error);
+                alert("Something went wrong");
+                setLoading(false);
+              }
+            }}
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
@@ -613,7 +684,85 @@ const Todo = () => {
             <Text
               style={{
                 fontSize: 16,
-                color: darkMode ? "#D4D4D4" : "#1E1E1E",
+                color: darkMode ? "#ff7270" : "#ff0400",
+              }}
+            >
+              Delete
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+      <Modal
+        isVisible={modalTodo}
+        onBackdropPress={() => setModalTodo(false)}
+        onBackButtonPress={() => setModalTodo(false)}
+        backdropColor={darkMode ? "#1E1E1E" : "#F2F2F2"}
+        backdropOpacity={0.8}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        animationInTiming={500}
+        animationOutTiming={1000}
+        backdropTransitionInTiming={500}
+        useNativeDriverForBackdrop={true}
+        backdropTransitionOutTiming={800}
+        style={{ margin: 0, justifyContent: "flex-end" }}
+      >
+        <View
+          style={{
+            backgroundColor: darkMode ? "#1E1E1E" : "#F2F2F2",
+            // backgroundColor: "red",
+            padding: 20,
+            borderRadius: 10,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              color: darkMode ? "#D4D4D4" : "#1E1E1E",
+              textAlign: "center",
+              borderBottomColor: darkMode ? "#2C2C2C" : "#E5E5E5",
+              borderBottomWidth: 1,
+              paddingBottom: 10,
+            }}
+          >
+            Edit Todo
+          </Text>
+          <TouchableOpacity
+            onPress={async () => {
+              try {
+                setLoading(true);
+
+                const res = await axios.put(
+                  "http://192.168.1.10:3000/api/todos",
+                  {
+                    id: selectTodo.id,
+                    userId: user.userId,
+                    isDeleted: true,
+                  }
+                );
+                console.log("sada");
+                dispatch(addTodo(res.data));
+                setModalTodo(false);
+                setLoading(false);
+              } catch (error) {
+                console.log(error);
+                alert("Something went wrong");
+                setLoading(false);
+              }
+            }}
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: 10,
+              marginBottom: 10,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                color: darkMode ? "#ff7270" : "#ff0400",
               }}
             >
               Delete

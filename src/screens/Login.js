@@ -97,6 +97,7 @@ const Login = ({ navigation }) => {
                 LoginStyles.input,
                 darkMode ? ThemeStyles.inputLight : ThemeStyles.inputDark,
               ]}
+              secureTextEntry={true}
               placeholder="Password"
               placeholderTextColor={darkMode ? "#D4D4D4" : "#A5A5A5"}
             />
