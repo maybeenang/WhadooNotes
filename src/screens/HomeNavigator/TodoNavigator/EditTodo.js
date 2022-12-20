@@ -67,7 +67,7 @@ const EditTodo = ({ route }) => {
               setLoading(true);
 
               const res = await axios.put(
-                "http://192.168.1.10:3000/api/notes",
+                "https://whadoonotes-rest-api-production.up.railway.app/api/notes",
                 {
                   userId: userId,
                   title,

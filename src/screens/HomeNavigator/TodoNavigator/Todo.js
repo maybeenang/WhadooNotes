@@ -52,7 +52,7 @@ const Todo = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://192.168.1.10:3000/api/${type}/${user.userId}`
+        `https://whadoonotes-rest-api-production.up.railway.app/api/${type}/${user.userId}`
       );
       type === "notes"
         ? dispatch(getNote(response.data))
@@ -128,7 +128,7 @@ const Todo = () => {
             try {
               setLoading(true);
               const response = await axios.put(
-                `http://192.168.1.10:3000/api/todos`,
+                `https://whadoonotes-rest-api-production.up.railway.app/api/todos`,
                 {
                   userId: user.userId,
                   id: item._id,
@@ -532,7 +532,7 @@ const Todo = () => {
                 try {
                   setLoading(true);
                   const res = await axios.post(
-                    "http://192.168.1.10:3000/api/todos",
+                    "https://whadoonotes-rest-api-production.up.railway.app/api/todos",
                     {
                       userId: user.userId,
                       label: tempTodoText,
@@ -656,7 +656,7 @@ const Todo = () => {
                 setLoading(true);
 
                 const res = await axios.put(
-                  "http://192.168.1.10:3000/api/notes",
+                  "https://whadoonotes-rest-api-production.up.railway.app/api/notes",
                   {
                     noteId: selectNote.id,
                     userId: user.userId,
@@ -734,7 +734,7 @@ const Todo = () => {
                 setLoading(true);
 
                 const res = await axios.put(
-                  "http://192.168.1.10:3000/api/todos",
+                  "https://whadoonotes-rest-api-production.up.railway.app/api/todos",
                   {
                     id: selectTodo.id,
                     userId: user.userId,

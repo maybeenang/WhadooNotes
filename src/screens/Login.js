@@ -151,7 +151,7 @@ const Login = ({ navigation }) => {
 
                 setLoading(true);
                 const response = await axios.post(
-                  "http://192.168.1.10:3000/api/auth",
+                  "https://whadoonotes-rest-api-production.up.railway.app/api/auth",
                   {
                     email,
                     password,

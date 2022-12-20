@@ -103,7 +103,7 @@ const Verify = ({ navigation }) => {
 
                 setLoading(true);
                 const response = await axios.get(
-                  `http://192.168.1.10:3000/api/users/${user.userId}/verify/${kode}`
+                  `https://whadoonotes-rest-api-production.up.railway.app/api/users/${user.userId}/verify/${kode}`
                 );
 
                 if (response.status == 200) {
